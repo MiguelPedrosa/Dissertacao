@@ -1,0 +1,27 @@
+{
+  "uve": true,
+  "streams": {
+    "u1": {
+      "datatype": "Byte",
+      "type": "write",
+      "descriptors": [
+        {
+          "offset": "dest",
+          "size": "size",
+          "stride": 1
+        }
+      ]
+    },
+    "u2": {
+      "datatype": "Byte",
+      "type": "read",
+      "descriptors": [
+        {
+          "offset": "src",
+          "size": "size",
+          "stride": 1
+        }
+      ]
+    }
+  }
+}

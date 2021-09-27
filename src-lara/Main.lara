@@ -1,0 +1,25 @@
+// Global Imports
+import clava.Clava;
+import clava.ClavaJoinPoints;
+
+// Local Imports
+import lara.Analyser;
+import lara.Generation;
+
+
+aspectdef main
+	input OUT_DIR="./output" end
+
+	var candidates = Analyser.findUVECandidates();
+	println("Found " + candidates.length + " candidates");
+
+	for (var $loop of candidates) {
+		var streamData = Analyser.extractStreamsInfo($loop);
+		var configString = Generation.generateLoopConfig(streamData);
+
+	  var UVE_code = ClavaJoinPoints.stmtLiteral(configString);
+	  $loop.replaceWith(UVE_code);
+	}
+
+  Clava.writeCode(OUT_DIR);
+end

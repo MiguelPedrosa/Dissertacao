@@ -1,0 +1,3 @@
+import lara.Instructions.Configuration;
+
+var Generation = {};
