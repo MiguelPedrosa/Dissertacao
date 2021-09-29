@@ -58,8 +58,12 @@ void uve_memcpy_loop(){
 #else
 
 void core_kernel(char *dest, char *src, int size) {
+	/**
+	 * These variables are present so that the following
+	 * loop generates a valid AST. They will be
+	 * replaced by clava
+	*/
 	char *u1, *u2;
-
 	#pragma clava data kernel.json
 	for (int i = 0; i < size; i++) {
 		u1 = u2;
