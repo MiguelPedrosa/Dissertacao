@@ -5,6 +5,9 @@ import clava.ClavaJoinPoints;
 // Local Imports
 import lara.Analyser;
 import lara.Generation;
+import lara.Inspector;
+// TODO: Move this to more apropriate section
+import lara.Analyses.Statment;
 
 
 aspectdef main
@@ -14,9 +17,15 @@ aspectdef main
 	println("Found " + candidates.length + " candidates");
 
 	for (var $loop of candidates) {
+		// Extract memory patterns that describe each stream
 		var streamData = Analyser.extractStreamsInfo($loop);
-		var configString = Generation.generateLoopConfig(streamData);
+		for (var $stmt of $loop.body.children)
+			Statment.processStatment($stmt);
 
+		Inspector.printJoinPoints($loop);
+
+		// Code Generation
+		var configString = Generation.generateLoopConfig(streamData);
 	  var UVE_code = ClavaJoinPoints.stmtLiteral(configString);
 	  $loop.replaceWith(UVE_code);
 	}
