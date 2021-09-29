@@ -1,4 +1,4 @@
 import weaver.Query;
 
 
-var Debug = {};
+var Inspector = {};
