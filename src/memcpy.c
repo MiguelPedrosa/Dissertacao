@@ -58,8 +58,7 @@ void uve_memcpy_loop(){
 #else
 
 void core_kernel(char *dest, char *src, int size) {
-	#define u1 dest[i]
-	#define u2  src[i]
+	char *u1, *u2;
 
 	#pragma clava data kernel.json
 	for (int i = 0; i < size; i++) {
