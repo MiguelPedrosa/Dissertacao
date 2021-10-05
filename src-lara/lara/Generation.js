@@ -1,7 +1,12 @@
 const { generateRead, generateWrite } = Configuration;
 
 
-Generation.generateLoopConfig = function (streamData) {
+Generation.generateUVE = function(representation) {
+  return _generateLoopConfig(representation);
+}
+
+
+function _generateLoopConfig(streamData) {
   const keys = Object.keys(streamData);
   let registerCounter = 0;
 
