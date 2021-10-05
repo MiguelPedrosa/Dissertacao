@@ -3,31 +3,34 @@ import clava.Clava;
 import clava.ClavaJoinPoints;
 
 // Local Imports
+import lara.Inspector; // Module used only for debugging purposes
 import lara.Analyser;
+import lara.IR;
 import lara.Generation;
-import lara.Inspector;
-// TODO: Move this to more apropriate section
-import lara.Analyses.Statment;
 
 
 aspectdef main
 	input OUT_DIR="./output" end
 
-	var candidates = Analyser.findUVECandidates();
-	println("Found " + candidates.length + " candidates");
+	var $candidates = Analyser.findUVECandidates();
+	println("Found " + $candidates.length + " uve candidates");
 
-	for (var $loop of candidates) {
+	for (var $loop of $candidates) {
+		var $loopStmts = $loop.body.children;
+
 		// Extract memory patterns that describe each stream
 		var streamData = Analyser.extractStreamsInfo($loop);
-		for (var $stmt of $loop.body.children)
-			Statment.processStatment($stmt);
 
-		Inspector.printJoinPoints($loop);
+		// Create an intermediate representation of the given statments
+		var intermediateRepresentation = IR.build($loopStmts, streamData);
+		IR.updateClava(IntermediateRepresentation);
+		var optimizedRepresentation = IR.optimize();
+		IR.updateClava(optimizedRepresentation);
 
-		// Code Generation
-		var configString = Generation.generateLoopConfig(streamData);
-	  var UVE_code = ClavaJoinPoints.stmtLiteral(configString);
-	  $loop.replaceWith(UVE_code);
+		// Generate UVE instructions for the loop' stream configuration and kernel
+		var uve_literal = Generation.generateUVE(optimizedRepresentation);
+	  var $UVE_code = ClavaJoinPoints.stmtLiteral(uve_literal);
+	  $loop.replaceWith($UVE_code);
 	}
 
   Clava.writeCode(OUT_DIR);
