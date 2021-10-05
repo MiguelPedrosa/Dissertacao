@@ -23,8 +23,9 @@ aspectdef main
 
 		// Create an intermediate representation of the given statments
 		var intermediateRepresentation = IR.build($loopStmts, streamData);
+		intermediateRepresentation.printContents();
 		IR.updateClava(intermediateRepresentation);
-		var optimizedRepresentation = IR.optimize();
+		var optimizedRepresentation = IR.optimize(intermediateRepresentation);
 		IR.updateClava(optimizedRepresentation);
 
 		// Generate UVE instructions for the loop' stream configuration and kernel
