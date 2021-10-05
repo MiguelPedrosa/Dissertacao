@@ -63,11 +63,12 @@ void core_kernel(char *dest, char *src, int size) {
 	 * loop generates a valid AST. They will be
 	 * replaced by clava
 	*/
-	char *u1, *u2;
+	char u1, u2, u3, u4;
 	#pragma clava data kernel.json
 	for (int i = 0; i < size; i++) {
-		u1 = u2;
+		u1 = u2 * u3 + u4 * 5;
 	}
+	
 }
 
 #endif
