@@ -23,7 +23,7 @@ aspectdef main
 
 		// Create an intermediate representation of the given statments
 		var intermediateRepresentation = IR.build($loopStmts, streamData);
-		IR.updateClava(IntermediateRepresentation);
+		IR.updateClava(intermediateRepresentation);
 		var optimizedRepresentation = IR.optimize();
 		IR.updateClava(optimizedRepresentation);
 
