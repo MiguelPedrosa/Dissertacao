@@ -67,6 +67,11 @@ void core_kernel(char *dest, char *src, int size) {
 	#pragma clava data kernel.json
 	for (int i = 0; i < size; i++) {
 		u1 = u2 * u3 + u4 * 5;
+		if (u1 & 1) {
+			u1 = u2 << 1;
+		} else {
+			u1 = u2 >> 1;
+		}
 	}
 	
 }
