@@ -1,1 +1,3 @@
+import lara.IntermediateRepresentation.Decompose;
+
 var IR = {};
