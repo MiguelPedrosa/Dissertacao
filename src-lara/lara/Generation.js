@@ -2,6 +2,7 @@ const { generateRead, generateWrite } = Configuration;
 
 
 Generation.generateUVE = function(representation) {
+  return '';
   return _generateLoopConfig(representation);
 }
 
