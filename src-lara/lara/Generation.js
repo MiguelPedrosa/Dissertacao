@@ -42,14 +42,18 @@ function _matchStreamType(stream, registerName) {
 const _datatypes = {
   "Byte": {
     "prefix": "b",
+    "width": 1,
   },
   "Half-Word": {
     "prefix": "h",
+    "width": 2,
   },
   "Word": {
     "prefix": "w",
+    "width": 4,
   },
-  "Double": {
+  "Double-Word": {
     "prefix": "d",
+    "width": 8,
   },
 };
