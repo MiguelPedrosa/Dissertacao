@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2016",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    "watch": true
+  },
+  "watchOptions": {
+    "watchDirectory": "fixedPollingInterval"
+  },
+  "include": [
+    "src-ts/*.ts",
+    "src-ts/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
+}
