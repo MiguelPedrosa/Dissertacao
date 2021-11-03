@@ -8,6 +8,8 @@ const StatmentTypes = {
   shr: 'shr',
   and: 'and',
   or: 'or',
+  less: 'less',
+  greatr: 'greatr',
   // 2. Unary operations
   neg: 'neg',
   conv: 'conv', // used for casts
@@ -16,6 +18,7 @@ const StatmentTypes = {
   // 4. Indexing operations
   load: 'load',
   store: 'store',
+  mov: 'mov',
   // 5. Unconditional jumps
   goto: 'goto',
   // 6. Conditional jumps
@@ -27,7 +30,8 @@ const StatmentTypes = {
   addr: 'addr',
   defer: 'defer',
   // 9. Utility
-  nop: 'nop', // useful for labeling statments for jumps
+  label: 'label', // useful for labeling statments for jumps
+  nop: 'nop',
 };
 
 
@@ -46,7 +50,7 @@ class Statment {
 
   toString() {
     const operandsLiteral = this.operands !== undefined ? ', ' + this.operands
-        .map((op) => op.toString())
+        // .map((op) => op.toString())
         .join(', ')
       : '';
     const metadataLiteral = this.metadata !== undefined ? " " + JSON.stringify(this.metadata) : '';
