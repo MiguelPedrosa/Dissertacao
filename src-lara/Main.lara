@@ -1,9 +1,10 @@
 // Global Imports
-import clava.Clava;
-import clava.ClavaJoinPoints;
+//import clava.Clava;
+//import clava.ClavaJoinPoints;
 
 // Local Imports
 import lara.Inspector; // Module used only for debugging purposes
+import lara.Transformations.ArrayAccess;
 import lara.Analyser;
 import lara.IR;
 import lara.Generation;
@@ -16,23 +17,28 @@ aspectdef main
 	println("Found " + $candidates.length + " uve candidates");
 
 	for (var $loop of $candidates) {
-		var $loopStmts = $loop.body.children;
-
-		// Extract memory patterns that describe each stream
-		var streamData = Analyser.extractStreamsInfo($loop);
-
-		// Create an intermediate representation of the given statments
-		var intermediateRepresentation = IR.build($loopStmts, streamData);
-		intermediateRepresentation.printContents();
-		IR.updateClava(intermediateRepresentation);
-		var optimizedRepresentation = IR.optimize(intermediateRepresentation);
-		IR.updateClava(optimizedRepresentation);
-
-		// Generate UVE instructions for the loop' stream configuration and kernel
-		var uve_literal = Generation.generateUVE(optimizedRepresentation);
-	  var $UVE_code = ClavaJoinPoints.stmtLiteral(uve_literal);
-	  $loop.replaceWith($UVE_code);
+		ArrayAccess.extractAccesses($loop);
+		ArrayAccess.replaceCommunAccesses($loop);
 	}
+
+//	for (var $loop of $candidates) {
+//		var $loopStmts = $loop.body.children;
+//
+//		// Extract memory patterns that describe each stream
+//		var streamData = Analyser.extractStreamsInfo($loop);
+//
+//		// Create an intermediate representation of the given statments
+//		var intermediateRepresentation = IR.build($loopStmts, streamData);
+//		intermediateRepresentation.printContents();
+//		IR.updateClava(intermediateRepresentation);
+//		var optimizedRepresentation = IR.optimize(intermediateRepresentation);
+//		IR.updateClava(optimizedRepresentation);
+//
+//		// Generate UVE instructions for the loop' stream configuration and kernel
+//		var uve_literal = Generation.generateUVE(optimizedRepresentation, streamData);
+//	  var $UVE_code = ClavaJoinPoints.stmtLiteral(uve_literal);
+//	  $loop.replaceWith($UVE_code);
+//	}
 
   Clava.writeCode(OUT_DIR);
 end
