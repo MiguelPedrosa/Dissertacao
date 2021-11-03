@@ -3,12 +3,13 @@ let registerCount = 0;
 class Register {
   constructor(type, name, metadata) {
     this.type = type;
+    this.hasOwnName = name !== undefined;
     this.name = name || registerCount++;
     this.metadata = metadata;
   }
 
   toString() {
-    return `${this.type[0]}_${this.name}`;
+    return `${this.hasOwnName ? '' : 'u'}${this.name}`;
   }
 
   getName() {
