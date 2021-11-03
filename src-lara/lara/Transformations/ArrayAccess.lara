@@ -1,0 +1,4 @@
+import clava.ClavaJoinPoints;
+import lara.Check;
+
+var ArrayAccess = {};
