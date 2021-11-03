@@ -20,17 +20,18 @@ function _decomposeStatment($stmt) {
     return stmts;
   }
   if ($stmt.joinPointType === "body") {
-    return $stmt.stmts.reduce((prev, $curr) => {
+    // TODO: Change children to use a more adequate atribute when one gets added
+    const stmts = $stmt.children.reduce((prev, $curr) => {
       const newStmts = _decomposeStatment($curr);
       return [...prev, ...newStmts];
     }, []);
+    return stmts;
   }
   println(`Cannot currently decompose statment of type: ${$stmt.joinPointType}`);
   return [];
 }
 
 function _decomposeIf($stmt) {
-
   const trueLabel = `true_${labelCount}`;
   const endLabel = `end_${labelCount}`;
   labelCount++;
@@ -38,10 +39,8 @@ function _decomposeIf($stmt) {
   const thenStmts = _decomposeStatment($stmt.then);
   const elseStmts = _decomposeStatment($stmt.else);
 
-  const stmtLabelTrue = new Statment(StatmentTypes.nop)
-    .addMetadata({ label: trueLabel });
-  const stmtLabelEnd = new Statment(StatmentTypes.nop)
-    .addMetadata({ label: endLabel });
+  const stmtLabelTrue = new Statment(StatmentTypes.label, trueLabel);
+  const stmtLabelEnd = new Statment(StatmentTypes.label, trueLabel);
   const stmtGotoTrue = new Statment(StatmentTypes.gotoIF)
     .addMetadata({ label: trueLabel, cond: condRegister });
   const stmtGotoEnd = new Statment(StatmentTypes.goto)
@@ -56,7 +55,6 @@ function _decomposeIf($stmt) {
     ...thenStmts,
     stmtLabelEnd,
   ];
-
 }
 
 function _decomposeExpr($expr) {
@@ -93,6 +91,10 @@ function _decomposeBinaryOp($expr) {
       return _decomposeBinaryArithmetic($expr, StatmentTypes.shr);
     case "&":
       return _decomposeBinaryArithmetic($expr, StatmentTypes.and);
+    case "<":
+      return _decomposeBinaryArithmetic($expr, StatmentTypes.less);
+    case ">":
+      return _decomposeBinaryArithmetic($expr, StatmentTypes.greatr);
     default:
       println("Cannot currently decompose BinaryOp of operation: " + $expr.operator);
       return ['NO_NAME', []];
@@ -137,7 +139,7 @@ function _decomposeBinaryArithmetic($expr, type) {
 }
 
 function _decomposeVarRef($expr) {
-  const type = StatmentTypes.load;
+  const type = StatmentTypes.mov;
   const register = new Register(registerType.vector);
 
   const newStmt = new Statment(type, register, [$expr.code]);
@@ -145,7 +147,7 @@ function _decomposeVarRef($expr) {
 }
 
 function _decomposeLiteral($expr) {
-  const type = StatmentTypes.load;
+  const type = StatmentTypes.mov;
   const register = new Register(registerType.vector);
 
   const newStmt = new Statment(type, register, [$expr.code]);
