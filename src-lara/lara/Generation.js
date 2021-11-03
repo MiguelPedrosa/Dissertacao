@@ -1,13 +1,18 @@
 const { generateRead, generateWrite } = Configuration;
 
 
-Generation.generateUVE = function(representation) {
-  return '';
-  return _generateLoopConfig(representation);
+Generation.generateUVE = function(streamLoop, streamConfig) {
+  return `
+  asm volatile(
+  "config: \\n\\t"
+  ${_generateConfig(streamConfig)}
+  "loop: \\n\\t"
+  ${_generateLoop(streamLoop)}
+  );`;
 }
 
 
-function _generateLoopConfig(streamData) {
+function _generateConfig(streamData) {
   const keys = Object.keys(streamData);
   let registerCounter = 0;
 
@@ -18,13 +23,41 @@ function _generateLoopConfig(streamData) {
     const instructions = _matchStreamType(currentStream, registerName);
     const instructionLiterals = instructions.reduce((prev, curr) => prev + `\t"${curr}  \\t\\n"\n`, "");
 
-    return prev + '\n' + instructionLiterals;
+    return prev + instructionLiterals;
   }, "");
 
-  return `asm volatile(\n\t"config:"\n${outputString});`;
+  return outputString;
 }
 
+function _generateLoop(streamLoop) {
+  return streamLoop.statments.reduce( (prev, curr) => {
+    const { type } = curr;
+    let result = '';
+    if (type === StatmentTypes.add) {
+      result = `"so.a.add ${curr.result}, ${curr.operands.join(', ')}, ps3 \\n\\t"`;
+    }
+    if (type === StatmentTypes.sub) {
+      result = `"so.a.sub ${curr.result}, ${curr.operands.join(', ')}, ps3 \\n\\t"`;
+    }
+    if (type === StatmentTypes.mult) {
+      result = `"so.a.mult ${curr.result}, ${curr.operands.join(', ')}, ps3 \\n\\t"`;
+    }
+    if (type === StatmentTypes.div) {
+      result = `"so.a.div ${curr.result}, ${curr.operands.join(', ')}, ps3 \\n\\t"`;
+    }
+    if (type === StatmentTypes.shl) {
+      result = `"so.a.shl ${curr.result}, ${curr.operands.join(', ')}, ps3 \\n\\t"`;
+    }
+    if (type === StatmentTypes.shr) {
+      result = `"so.a.shr ${curr.result}, ${curr.operands.join(', ')}, ps3 \\n\\t"`;
+    }
+    if (type === StatmentTypes.mov) {
+      result = `"mv ${curr.result}, ${curr.operands[0]} \\n\\t"`;
+    }
+    return prev + '\t' + result + '\n';
+  }, "");
 
+}
 
 function _matchStreamType(stream, registerName) {
   const { type, descriptors, datatype } = stream;
