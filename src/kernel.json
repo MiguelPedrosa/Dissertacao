@@ -1,24 +1,24 @@
 {
   "uve": true,
   "streams": {
-    "u1": {
+    "streamY": {
       "datatype": "Byte",
       "type": "write",
       "descriptors": [
         {
           "offset": "dest",
-          "size": "size",
+          "size": "sizeN",
           "stride": 1
         }
       ]
     },
-    "u2": {
+    "streamX": {
       "datatype": "Byte",
       "type": "read",
       "descriptors": [
         {
           "offset": "src",
-          "size": "size",
+          "size": "sizeN",
           "stride": 1
         }
       ]
