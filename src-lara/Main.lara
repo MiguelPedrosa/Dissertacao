@@ -18,7 +18,7 @@ aspectdef main
 
 	for (var $loop of $candidates) {
 		ArrayAccess.extractAccesses($loop);
-		ArrayAccess.replaceCommunAccesses($loop);
+		ArrayAccess.replaceCommonAccesses($loop);
 	}
 
 //	for (var $loop of $candidates) {
