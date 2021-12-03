@@ -5,6 +5,7 @@
 // Local Imports
 import lara.Inspector; // Module used only for debugging purposes
 import lara.Transformations.ArrayAccess;
+import lara.Transformations.DesugarExpression;
 import lara.Analyser;
 import lara.IR;
 import lara.Generation;
@@ -12,13 +13,19 @@ import lara.Generation;
 
 aspectdef main
 	input OUT_DIR="./output" end
+	setDebug(true);
 
 	var $candidates = Analyser.findUVECandidates();
 	println("Found " + $candidates.length + " uve candidates");
-
-	for (var $loop of $candidates) {
-		ArrayAccess.extractAccesses($loop);
-		ArrayAccess.replaceCommonAccesses($loop);
+	try {
+		for (var $loop of $candidates) {
+			DesugarExpression.desugarLoop($loop);
+			ArrayAccess.extractAccesses($loop);
+			ArrayAccess.replaceCommonAccesses($loop);
+			ArrayAccess.removeUnusedVariables($loop);
+		}
+	} catch(e) {
+		println(e.stack);
 	}
 
 //	for (var $loop of $candidates) {
@@ -39,6 +46,5 @@ aspectdef main
 //	  var $UVE_code = ClavaJoinPoints.stmtLiteral(uve_literal);
 //	  $loop.replaceWith($UVE_code);
 //	}
-
-  Clava.writeCode(OUT_DIR);
+	Clava.writeCode(OUT_DIR);
 end
