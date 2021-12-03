@@ -7,7 +7,7 @@ find_package(Clava REQUIRED)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED True)
 
-set(SRC src/memcpy.c)
+set(SRC src-example/memcpy.c)
 
 add_executable(run-uve "${SRC}")
 
