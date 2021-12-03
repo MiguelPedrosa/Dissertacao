@@ -1,3 +1,5 @@
 build
-dist
+output
+err.txt
 .vscode/settings.json
+woven_code
