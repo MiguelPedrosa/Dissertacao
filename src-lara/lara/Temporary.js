@@ -12,15 +12,12 @@ function extractAccesses($loop) {
   }
 }
 
-function readASM(dest, src, pred = 'p0') {
+function readASM(dest, src) {
   // Build array from u0 to u31 strings
   const possibleRegisters = [...Array(32).keys()].map(elem => `u${elem}`);
   if (!possibleRegisters.includes(src)) throw new Error(`Trying to use a vector register not allowed: ${src}`);
-  // Build array from p0 to p15 strings
-  const possiblePredicates = [...Array(16).keys()].map(elem => `p${elem}`);
-  if (!possiblePredicates.includes(pred)) throw new Error(`Trying to use a predicate register not allowed: ${pred}`);
 
-  return `so.v.mvvs ${dest}, ${src}, ${pred}`;
+  return `so.v.mvvs ${dest}, ${src}`;
 }
 
 function writeASM(dest, src, width) {
@@ -28,7 +25,7 @@ function writeASM(dest, src, width) {
   const possibleRegisters = [...Array(32).keys()].map(elem => `u${elem}`);
   if (!possibleRegisters.includes(dest)) throw new Error(`Trying to use a vector register not allowed: ${dest}`);
   // Check if widths are acceptable
-  if (![1, 2, 4, 8].includes(width)) throw new Error(`Trying to use a width not allowed: ${width}`);
+  if (!['b', 'h', 'w', 'd'].includes(width)) throw new Error(`Trying to use a width not allowed: ${width}`);
 
   return `so.v.mvsv.${width} ${dest}, ${src}`;
 }
@@ -53,20 +50,26 @@ function extractSingleAccess($arrayAccess, newName, regName) {
   $arrayAccess.insertBefore($newVarDecl);
 
   if (isWrite) {
-    const width = $arrayAccess.bitWidth / 8;
+    const widthMapping = {
+      1 : 'b',
+      2 : 'h',
+      4 : 'w',
+      8 : 'd',
+    }
+    const width = widthMapping[$arrayAccess.bitWidth / 8];
     const asmOperations = [writeASM(regName, '%[x]', width) ];
-    const inputOperands = {
-      'x': newName,
-    };
-    const asmLiteral = asmTemplate(asmOperations, inputOperands, {});
-    const $asmStmt = ClavaJoinPoints.stmtLiteral(asmLiteral);
-    $arrayAccess.insertAfter($asmStmt);
-  } else {
-    const asmOperations = [readASM('%[x]', regName) ];
     const outputOperands = {
       'x': newName,
     };
     const asmLiteral = asmTemplate(asmOperations, {}, outputOperands);
+    const $asmStmt = ClavaJoinPoints.stmtLiteral(asmLiteral);
+    $arrayAccess.insertAfter($asmStmt);
+  } else {
+    const asmOperations = [readASM('%[x]', regName) ];
+    const inputOperands = {
+      'x': newName,
+    };
+    const asmLiteral = asmTemplate(asmOperations, inputOperands, {});
     
     const $asmStmt = ClavaJoinPoints.stmtLiteral(asmLiteral);
     $arrayAccess.insertBefore($asmStmt);
