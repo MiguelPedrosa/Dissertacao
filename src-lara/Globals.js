@@ -7,14 +7,17 @@ function getTransformations() {
   return [
     DesugarExpression.desugarLoop,
     ArrayAccess.extractAccesses,
-    ArrayAccess.replaceCommonAccesses,
+    // ArrayAccess.replaceCommonAccesses,
     ArrayAccess.removeUnusedVariables,
   ];
 }
 
 function getBenchmarksInfo() {
   return [
-    { name: "floyd-marshall" },
-    { name: "saxpy" }
+    // { name: "floyd-marshall" },
+    // { name: "saxpy" },
+    // { name: "trisolv" },
+    // { name: "gemm" },
+    { name: "covariance" },
   ];
 }
