@@ -73,3 +73,12 @@ aspectdef Launcher
 
     }
 }
+
+
+
+~matos Identifica vários pontos da motivação para o uso de compilação src2src:
+ - Permitir avançar mais rapidamente investigação em padrões de alto nível de otimização deixando os detalhes mais low-level para os compiladores existentes (por exemplo compiladores industriais para hardware específico) [separation of concern]
+	 - Focar as soluções de transformação de código nos aspetos de extensibilidade para mais utilizadores poderem usar este tipo de técnicas vs ter de modificar compiladores específicos [evitar uma situação de M*N implementations)
+	Desenvolvimento em ROSE parece ser feito usando uma biblioteca C/C++ (considerando o uso de templates nos exemplos de código deve ser mais em C++). Suponho que através de uma DSL embutida. Também há ferramentas standalone para casos de utilização comuns.
+"The ROSE source-to-source compiler infrastructure"
+https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.459.1970&rep=rep1&type=pdf
