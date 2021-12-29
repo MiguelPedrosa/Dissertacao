@@ -11,20 +11,20 @@ Generation.generateUVE = function(streamLoop, streamConfig) {
   );`;
 }
 
+Generation.generateConfig = _generateConfig;
 
 function _generateConfig(streamData) {
   const keys = Object.keys(streamData);
-  let registerCounter = 0;
 
-  const outputString = keys.reduce((prev, currKey) => {
+  const outputString = keys.map(currKey => {
     const currentStream = streamData[currKey];
-    const registerName = `u${registerCounter++}`;
+    const registerName = currentStream.register;
 
     const instructions = _matchStreamType(currentStream, registerName);
-    const instructionLiterals = instructions.reduce((prev, curr) => prev + `\t"${curr}  \\t\\n"\n`, "");
+    const instructionLiterals = instructions.join(" \\t\\n\n");
 
-    return prev + instructionLiterals;
-  }, "");
+    return instructionLiterals;
+  }).join('\n');
 
   return outputString;
 }
