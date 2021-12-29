@@ -28,16 +28,8 @@ function extractSingleAccess($arrayAccess, newName) {
   const $rhs = isWrite ? ClavaJoinPoints.unaryOp('&', $arrayAccess) : $arrayAccess;
   const $newVarDecl = ClavaJoinPoints.varDecl(newName, $rhs);
 
-  // Find the nearest parent that is a for-loop
-  let $parentLoop = $arrayAccess.ancestor('loop');
-  // Do not perform changes if there isn't a surrounding for-loop
-  if ($parentLoop === undefined) {
-    return;
-  }
-
-  // Insert new declaration inside loop body, before any existing statments
-  const $firstLoopStmt = $parentLoop.body.children[0];
-  $firstLoopStmt.insertBefore($newVarDecl);
+  // Insert new declaration before the access is performed
+  $arrayAccess.insertBefore($newVarDecl);
 
   // Replace given access with new variable name
   const $varref = $newVarDecl.varref();
