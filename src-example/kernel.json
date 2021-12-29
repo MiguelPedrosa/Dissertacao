@@ -1,9 +1,11 @@
 {
   "uve": true,
   "streams": {
-    "streamY": {
-      "datatype": "Byte",
+    "streamDest": {
+      "datatype": "Word",
+      "isFloat": true,
       "type": "write",
+      "register": "u0",
       "descriptors": [
         {
           "offset": "dest",
@@ -12,9 +14,11 @@
         }
       ]
     },
-    "streamX": {
-      "datatype": "Byte",
+    "streamSrc": {
+      "datatype": "Word",
+      "isFloat": true,
       "type": "read",
+      "register": "u1",
       "descriptors": [
         {
           "offset": "src",
