@@ -2,8 +2,7 @@
   "uve": true,
   "streams": {
     "streamDest": {
-      "datatype": "Word",
-      "isFloat": true,
+      "datatype": "Half",
       "type": "write",
       "register": "u0",
       "descriptors": [
@@ -15,8 +14,7 @@
       ]
     },
     "streamSrc": {
-      "datatype": "Word",
-      "isFloat": true,
+      "datatype": "Half",
       "type": "read",
       "register": "u1",
       "descriptors": [
