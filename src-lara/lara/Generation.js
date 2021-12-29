@@ -83,7 +83,7 @@ const _datatypes = {
     "prefix": "b",
     "width": 1,
   },
-  "Half-Word": {
+  "Half": {
     "prefix": "h",
     "width": 2,
   },
@@ -91,7 +91,7 @@ const _datatypes = {
     "prefix": "w",
     "width": 4,
   },
-  "Double-Word": {
+  "Double": {
     "prefix": "d",
     "width": 8,
   },
