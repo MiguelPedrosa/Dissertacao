@@ -35,7 +35,7 @@ try {
 //		// Generate UVE instructions for the loop' stream configuration and kernel
 		if (streamData === undefined) println("Stream data is undefined");
 		var uveConfig = Generation.generateConfig(streamData);
-		println("UVE Config: " + uveConfig);
+//		println("UVE Config: " + uveConfig);
 		//var uve_literal = Generation.generateUVE(optimizedRepresentation, streamData);
 	  //var $UVE_code = ClavaJoinPoints.stmtLiteral(uve_literal);
 	  //$loop.replaceWith($UVE_code);
