@@ -30,7 +30,7 @@ function desugarBinaryOPAssigns($loop) {
     operator: op => opKeys.includes(op),
   }).get();
 
-  for (var $expr of $targetJPs) {
+  for (const $expr of $targetJPs) {
     const $left = $expr.left;
     let $right = $expr.right;
     const type = $expr.type;
