@@ -34,22 +34,22 @@ function _generateLoop(streamLoop) {
     const { type } = curr;
     let result = '';
     if (type === StatmentTypes.add) {
-      result = `"so.a.add ${curr.result}, ${curr.operands.join(', ')}, ps3 \\n\\t"`;
+      result = `"so.a.add ${curr.result}, ${curr.operands.join(', ')}, ps0 \\n\\t"`;
     }
     if (type === StatmentTypes.sub) {
-      result = `"so.a.sub ${curr.result}, ${curr.operands.join(', ')}, ps3 \\n\\t"`;
+      result = `"so.a.sub ${curr.result}, ${curr.operands.join(', ')}, ps0 \\n\\t"`;
     }
     if (type === StatmentTypes.mult) {
-      result = `"so.a.mult ${curr.result}, ${curr.operands.join(', ')}, ps3 \\n\\t"`;
+      result = `"so.a.mult ${curr.result}, ${curr.operands.join(', ')}, ps0 \\n\\t"`;
     }
     if (type === StatmentTypes.div) {
-      result = `"so.a.div ${curr.result}, ${curr.operands.join(', ')}, ps3 \\n\\t"`;
+      result = `"so.a.div ${curr.result}, ${curr.operands.join(', ')}, ps0 \\n\\t"`;
     }
     if (type === StatmentTypes.shl) {
-      result = `"so.a.shl ${curr.result}, ${curr.operands.join(', ')}, ps3 \\n\\t"`;
+      result = `"so.a.shl ${curr.result}, ${curr.operands.join(', ')}, ps0 \\n\\t"`;
     }
     if (type === StatmentTypes.shr) {
-      result = `"so.a.shr ${curr.result}, ${curr.operands.join(', ')}, ps3 \\n\\t"`;
+      result = `"so.a.shr ${curr.result}, ${curr.operands.join(', ')}, ps0 \\n\\t"`;
     }
     if (type === StatmentTypes.mov) {
       result = `"mv ${curr.result}, ${curr.operands[0]} \\n\\t"`;
