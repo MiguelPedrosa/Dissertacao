@@ -1,0 +1,3 @@
+import clava.ClavaJoinPoints;
+
+var Dimension = {};
