@@ -1,0 +1,23 @@
+import weaver.Query;
+
+function printTypes($node, indentation) {
+    var prefix = "\t";
+    var unWantedTypes = ['program', 'function', 'file', 'body', 'loop'];
+    // Some ndoes have too much information to print all of their content
+    if (!unWantedTypes.includes($node.joinPointType))
+        println(prefix.repeat(indentation) + "node " + $node.joinPointType + ": " + $node.code);
+    else {
+        println(prefix.repeat(indentation) + "node " + $node.joinPointType);
+    }
+    for (var $child of $node.children) {
+        printTypes($child, indentation + 1);
+    }
+}
+
+function printAllTypes() {
+    printTypes(Query.root(), 0);
+}
+
+aspectdef printNodesFromRoot
+    printAllTypes();
+end
