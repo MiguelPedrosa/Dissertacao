@@ -10,38 +10,41 @@ import lara.Analyser;
 import lara.IR;
 import lara.Generation;
 import lara.Temporary;
+import lara.Dimension;
 
 
 aspectdef main
 	input OUT_DIR="./output" end
 	setDebug(true);
 
-try {
-	var $candidates = Analyser.findUVECandidates();
-	println("Found " + $candidates.length + " uve candidates");
-	for (var $loop of $candidates) {
-		var $loopStmts = $loop.body.children;
+	try {
+		var $candidates = Analyser.findUVECandidates();
+		println("Found " + $candidates.length + " uve candidates");
+		for (var $loop of $candidates) {
+			DesugarExpression.desugarLoop($loop);
+			Dimension.work($loop);
+			//var $loopStmts = $loop.body.children;
 
-		// Extract memory patterns that describe each stream
-		var streamData = Analyser.extractStreamsInfo($loop);
-		Temporary.extractAccesses($loop);
-//		// Create an intermediate representation of the given statments
-//		var intermediateRepresentation = IR.build($loopStmts, streamData);
-//		intermediateRepresentation.printContents();
-//		IR.updateClava(intermediateRepresentation);
-//		var optimizedRepresentation = IR.optimize(intermediateRepresentation);
-//		IR.updateClava(optimizedRepresentation);
-//
-//		// Generate UVE instructions for the loop' stream configuration and kernel
-		if (streamData === undefined) println("Stream data is undefined");
-		var uveConfig = Generation.generateConfig(streamData);
-//		println("UVE Config: " + uveConfig);
-		//var uve_literal = Generation.generateUVE(optimizedRepresentation, streamData);
-	  //var $UVE_code = ClavaJoinPoints.stmtLiteral(uve_literal);
-	  //$loop.replaceWith($UVE_code);
+			// Extract memory patterns that describe each stream
+			//var streamData = Analyser.extractStreamsInfo($loop);
+	//			Temporary.extractAccesses($loop);
+	//		// Create an intermediate representation of the given statments
+	//		var intermediateRepresentation = IR.build($loopStmts, streamData);
+	//		intermediateRepresentation.printContents();
+	//		IR.updateClava(intermediateRepresentation);
+	//		var optimizedRepresentation = IR.optimize(intermediateRepresentation);
+	//		IR.updateClava(optimizedRepresentation);
+	//
+	//		// Generate UVE instructions for the loop' stream configuration and kernel
+			//if (streamData === undefined) println("Stream data is undefined");
+			//var uveConfig = Generation.generateConfig(streamData);
+			//println("UVE Config: " + uveConfig);
+			//var uve_literal = Generation.generateUVE(optimizedRepresentation, streamData);
+		  //var $UVE_code = ClavaJoinPoints.stmtLiteral(uve_literal);
+		  //$loop.replaceWith($UVE_code);
+		}
+	} catch (err) {
+		println("[User Error]: Printing trace: " + err);
 	}
-} catch (err) {
-	println("[User Error]: Printing trace: " + err);
-}
 	Clava.writeCode(OUT_DIR);
 end
