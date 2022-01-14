@@ -82,3 +82,7 @@ aspectdef Launcher
 	Desenvolvimento em ROSE parece ser feito usando uma biblioteca C/C++ (considerando o uso de templates nos exemplos de código deve ser mais em C++). Suponho que através de uma DSL embutida. Também há ferramentas standalone para casos de utilização comuns.
 "The ROSE source-to-source compiler infrastructure"
 https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.459.1970&rep=rep1&type=pdf
+
+
+nuno.roma@inesc-id.pt
+pedro.tomas@inesc-id.pt
