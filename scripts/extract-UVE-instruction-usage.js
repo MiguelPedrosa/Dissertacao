@@ -23,7 +23,7 @@ benchs.forEach(bench => {
 
         // Add benchmark's line to inner Map
         const benchLines = insMap.has(bench) ? insMap.get(bench) : new Array();
-        benchLines.push(`#L${lineIdx}`);
+        benchLines.push(`#L${lineIdx + 1}`);
         insMap.set(bench, benchLines);
 
         // Add benchmarks's name to outer Map
@@ -37,12 +37,13 @@ benchs.forEach(bench => {
 });
 
 
+const sortedInstructions = new Map([...instructions.entries()].sort());
 
-instructions.forEach((insMap, insName) => {
+sortedInstructions.forEach((insMap, insName) => {
   const instBenchs = [];
   insMap.forEach((benchLines, benchName) => {
     instBenchs.push(`${benchName}: ${benchLines.join(', ')}`)
   });
-  console.log(`- [ ] ${insName}: \n\t\t* ${instBenchs.join('\n\t\t* ')}`)
+  console.log(`- [ ] ${insName}: \n\t* ${instBenchs.join('\n\t* ')}`)
 });
 
