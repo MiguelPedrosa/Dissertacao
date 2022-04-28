@@ -3,3 +3,6 @@ output
 err.txt
 .vscode/settings.json
 woven_code
+
+Spike-validation/run_simple
+Spike-validation/run_uve
