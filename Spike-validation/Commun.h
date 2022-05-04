@@ -6,19 +6,19 @@
 
 /* Configure size of array and, as such, amount of operations */
 #ifndef SIZE
-#define SIZE 30
+#define SIZE 64
 #endif
 
 /* Becase we might wanna test differnt properties, we can define here a diferent build type */
 // Using floats
 #if TYPE == 1
-#define DataType float
+#define DataType double
 #define DataSet fDataset
-#define DataFormat(start, end) start "%f" end
+#define DataFormat(start, end) start "%lf" end
 
 // Using integers
 #elif TYPE == 2
-#define DataType int
+#define DataType long
 #define DataSet iDataset
 #define DataFormat(start, end) start "%d" end
 
