@@ -6,21 +6,19 @@
 
 void uve_config(DataType dest[SIZE], DataType src[SIZE]) {
 	asm volatile(
-		"ss.st.w  u1, %[dest], %[size], %[stride] \t\n"
-		"ss.ld.w  u2,  %[src], %[size], %[stride] \t\n"
+		"ss.st.d  u1, %[dest], %[size], %[stride] \t\n"
+		"ss.ld.d  u2,  %[src], %[size], %[stride] \t\n"
 		:: [dest] "r" (dest),
       [src] "r" (src),
       [size] "r" (SIZE),
-      [stride] "r" (1)
-	);
+      [stride] "r" (1));
 }
 
 void uve_loop(){
 	asm volatile(
 		"Loop: \t\n"
 		"so.v.mv u1, u2, p0 \n\t"
-		"so.b.nc	u2, Loop \n\t"
-	);
+		"so.b.nc	u2, Loop \n\t");
 }
 
 #else // non UVE_RUN
@@ -51,5 +49,4 @@ int main()
 
   for (int i = 0; i < SIZE; i++)
     printf( DataFormat("", "\n"), dest[i]);
-
 }
