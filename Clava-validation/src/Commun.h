@@ -27,19 +27,9 @@
 #endif // TYPE
 
 
-void initArray(DataType array[SIZE]) {
-  const DataType values[] = DataSet;
+void initArray(DataType array[SIZE]);
 
-  for (int i = 0; i < SIZE; i++) {
-    array[i] = values[i];
-  }
-}
-void initZero(DataType array[SIZE]) {
-
-  for (int i = 0; i < SIZE; i++) {
-    array[i] = 0;
-  }
-}
+void initZero(DataType array[SIZE]);
 
 
 #endif // COMMUN_H
