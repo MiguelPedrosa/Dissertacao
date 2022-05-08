@@ -1,0 +1,22 @@
+aspectdef Launcher
+	input kernelName = "memcpy", compFlags="-DSIZE=2048 -DTYPE=1" end
+  laraImport("Globals");
+  laraImport("LoadKernel");
+
+  // Load all wanted transformations
+  var transformations = getTransformations();
+
+  loadBenchmark(kernelName, compFlags);
+
+  // Find all loops candidates and 
+  // apply each transformation to every candidates
+  var $loops = getUVECandidates();
+  for (var func of transformations) {
+    for (var $loop of $loops) {
+      func($loop);
+    }
+  }
+
+  // Store produced code into separate file
+  Clava.writeCode("output/" + kernelName);
+end
