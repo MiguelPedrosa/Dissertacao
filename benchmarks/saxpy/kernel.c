@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include "Commun.h"
+
 
 
 #ifdef RUN_UVE
@@ -26,6 +26,7 @@ void core(DataType dest[SIZE], DataType src[SIZE], DataType value) {
 }
 #endif // RUN_UVE
 
+
 #ifdef RUN_SIMPLE
 void core(DataType dest[SIZE], DataType src[SIZE], DataType A) {
   for (int i = 0; i < SIZE; i++) {
@@ -33,6 +34,17 @@ void core(DataType dest[SIZE], DataType src[SIZE], DataType A) {
   }
 }
 #endif // RUN_SIMPLE
+
+
+#ifdef RUN_CLAVA
+void core(DataType dest[SIZE], DataType src[SIZE], DataType A) {
+  #pragma clava data uve : true
+  for (int i = 0; i < SIZE; i++) {
+    dest[i] += src[i] * A;
+  }
+}
+#endif // RUN_CLAVA
+
 
 #ifdef RUN_BLANK
 void core(DataType dest[SIZE], DataType src[SIZE], DataType A) {
