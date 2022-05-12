@@ -10,9 +10,9 @@ void core(DataType A[SIZE], DataType B[SIZE], DataType ct) {
     "ss.ld.d    u3, %[src1c], %[sn], %[one] \t\n" 
     "ss.st.d    u4, %[src2],  %[sn], %[one] \t\n"
     "so.v.dp.d  u20, %[ct],    p0            \t\n"
-    : : [src1a] "r" (src1), [src1b] "r" (src1+1),
-      [src1c] "r" (src1+2), [sn] "r"(sizeN - 2),
-      [src2] "r" (src2+1), [one] "r" (1), [ct] "r" (ct)
+    : : [src1a] "r" (A), [src1b] "r" (A+1),
+      [src1c] "r" (A+2), [sn] "r"(SIZE - 2),
+      [src2] "r" (B+1), [one] "r" (1), [ct] "r" (ct)
   );
   asm volatile(
 	".uve_loop%= : \t\n"
