@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include "Commun.h"
+
 
 
 #ifdef RUN_UVE
@@ -27,6 +27,7 @@ void core(DataType dest[SIZE], DataType src[SIZE]) {
 }
 #endif // RUN_SIMPLE
 
+
 #ifdef RUN_CLAVA
 void core(DataType dest[SIZE], DataType src[SIZE]) {
   #pragma clava data uve : true
@@ -36,9 +37,8 @@ void core(DataType dest[SIZE], DataType src[SIZE]) {
 }
 #endif // RUN_CLAVA
 
+
 #ifdef RUN_BLANK
 void core(DataType dest[SIZE], DataType src[SIZE]) {
-
 }
 #endif // RUN_BLANK
-

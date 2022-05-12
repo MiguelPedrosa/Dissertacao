@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "Commun.h"
 
+
 extern void core(DataType dest[SIZE], DataType src[SIZE]);
 
 int main()
