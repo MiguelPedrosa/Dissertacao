@@ -7,7 +7,7 @@ function loadBenchmark(benchmarkName, extraFlags = "") {
 
 	const config = Clava.getData();
 	const currentFolderFolder = config.getContextFolder();
-  config.setFlags("-Wall -pedantic -DRUN_SIMPLE " + extraFlags);
+  config.setFlags("-Wall -pedantic -DRUN_CLAVA " + extraFlags);
 	const benchmarkFolder = Io.getPath(currentFolderFolder, "./benchmarks");
 	const kernelFile = Io.getPath(benchmarkFolder, benchmarkName + "/kernel.c");
 
