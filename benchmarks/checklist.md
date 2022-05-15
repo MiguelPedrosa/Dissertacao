@@ -1,7 +1,7 @@
 # PolyBench 4.0 Kernels
 
 ## Data Mining
- - [x] covariance
+ - [ ] covariance
  - [ ] correlation
 
 ## BLAS Routines
@@ -15,7 +15,7 @@
 
 ## Linear Algebra Kernels
  - [ ] 2mm
- - [ ] 3mm
+ - [x] 3mm
  - [ ] atax
  - [ ] bicg
  - [ ] doitgen
@@ -38,6 +38,6 @@
  - [ ] adi
  - [ ] fdtd-2d
  - [ ] heat-3d
- - [ ] jacobi-1d
- - [ ] jacobi-2d
+ - [x] jacobi-1d
+ - [x] jacobi-2d
  - [ ] seidel-2d
