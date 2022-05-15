@@ -15,13 +15,3 @@ function getTransformations() {
     removeUnusedVariables,
   ];
 }
-
-function getBenchmarksInfo() {
-  return [
-    // { name: "floyd-marshall" },
-    // { name: "saxpy" },
-    // { name: "trisolv" },
-    // { name: "gemm" },
-    { name: "covariance" },
-  ];
-}
