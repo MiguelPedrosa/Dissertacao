@@ -1,5 +1,5 @@
 aspectdef Launcher
-	input kernelName = "memcpy", compFlags="-DSIZE=2048 -DTYPE=1" end
+	input kernelName = "memcpy", compFlags="" end
   laraImport("Globals");
   laraImport("LoadKernel");
 

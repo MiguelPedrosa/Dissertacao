@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 
 const { spawnSync }= require("child_process");
+const { exit } = require("process");
 
-const kernels = [ "memcpy", "saxpy", "test" ];
-const compileFlags = [ "-Wall", "-pedantic", "-DTYPE=1", "-DSIZE=2048" ];
+// const kernels = [ "3mm", "floyd-marshall", "gemm", "jacobi-1d", "jacobi-2d", "memcpy", "saxpy", "trisolv" ];
+const kernels = [ "test" ];
+const compileFlags = [ "-Wall", "-pedantic", "-DTYPE=1", "-DSIZE=64" ];
 const linkFlags = [ "-Wall", "-pedantic", "-static" ];
 const compilerPath = "/home/miguel/diss/sources/install/uve_tc/bin/riscv64-unknown-elf-gcc";
 const pkPath = "/home/miguel/diss/tools/riscv64-unknown-elf/bin/pk";
@@ -18,7 +20,7 @@ function executableRun(command, args) {
     throw new Error(`An error occured while trying to run ${command}: ${executable.error.message}`);
   }
   if (executable.status != 0) {
-    throw new Error(`Issue in Kernel ${command}: Execution failed\nStderr: ${executable.stderr}\nStdout: ${executable.stdout}`);
+    throw new Error(`Issue in executable ${command} [${args.join(' ')}]: Execution failed\nStderr: ${executable.stderr}\nStdout: ${executable.stdout}`);
   }
   return executable;
 }
@@ -63,9 +65,9 @@ for (let kernel of kernels) {
   /* Compile and link each kernel file */
   compileKernel(compilerPath, [...compileFlags, "-DRUN_SIMPLE", "-Ibenchmarks/", "-O0", `benchmarks/${kernel}/kernel.c`, "-c" ]);
   compileKernel(compilerPath, [...linkFlags, "-O0", "Commun.o", `kernel.o`, `main.o`, "-o", bin_simple]);
-  
-  executableRun("clava", ["Transform.lara", "-i", "src-lara", `--argv=kernelName:'${kernel}'`]);
-  compileKernel(compilerPath, [...compileFlags, "-DRUN_CLAVA", "-Ibenchmarks/", "-O0", `output/${kernel}/kernel.c`, "-c" ]);
+
+  executableRun("clava", ["Transform.lara", "-i", "src-lara", `--argv=kernelName:'${kernel}', compFlags:'${compileFlags.join(' ')}'`]);
+  compileKernel(compilerPath, [...compileFlags, "-Ibenchmarks/", "-O0", `output/${kernel}/kernel.c`, "-c" ]);
   compileKernel(compilerPath, [...linkFlags, "-O0", "Commun.o", `kernel.o`, `main.o`, "-o", bin_clava]);
 
   /* Run each kernel file */
