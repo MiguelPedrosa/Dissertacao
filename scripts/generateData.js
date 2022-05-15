@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const amount = 200;
+const amount = 65536;
 const maxValue = 100;
 const minValue = -100;
 
