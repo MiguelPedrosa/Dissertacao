@@ -8,14 +8,14 @@
 
 
 #ifdef RUN_SIMPLE
-void core(DataType path[SIZE]) {
-  for (int i = 0; i < sizeI; i++) {
-    for (int j = 0; j < sizeJ; j++) {
-      src1[i][j] = 0;
+void core(DataType path[SIZE][SIZE]) {
+  for (int i = 0; i < SIZE; i++) {
+    for (int j = 0; j < SIZE; j++) {
+      path[i][j] = 0;
     }
-    for (int k = 0; k < sizeK; k++) {
-      for (int j = 0; j < sizeJ; j++) {
-        src1[i][j] += src2[i][k] * src3[k][j];
+    for (int k = 0; k < SIZE; k++) {
+      for (int j = 0; j < SIZE; j++) {
+        path[i][j] += path[i][k] * path[k][j];
       }
     }
   }
@@ -24,15 +24,15 @@ void core(DataType path[SIZE]) {
 
 
 #ifdef RUN_CLAVA
-void core(DataType path[SIZE]) {
+void core(DataType path[SIZE][SIZE]) {
 #pragma clava data uve : true
-  for (int i = 0; i < sizeI; i++) {
-    for (int j = 0; j < sizeJ; j++) {
-      src1[i][j] = 0;
+  for (int i = 0; i < SIZE; i++) {
+    for (int j = 0; j < SIZE; j++) {
+      path[i][j] = 0;
     }
-    for (int k = 0; k < sizeK; k++) {
-      for (int j = 0; j < sizeJ; j++) {
-        src1[i][j] += src2[i][k] * src3[k][j];
+    for (int k = 0; k < SIZE; k++) {
+      for (int j = 0; j < SIZE; j++) {
+        path[i][j] += path[i][k] * path[k][j];
       }
     }
   }
