@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 const { spawnSync }= require("child_process");
-const { exit } = require("process");
 
 // const kernels = [ "3mm", "floyd-marshall", "gemm", "jacobi-1d", "jacobi-2d", "memcpy", "saxpy", "trisolv" ];
 const kernels = [ "test" ];
