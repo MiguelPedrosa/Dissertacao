@@ -8,13 +8,13 @@
 
 
 #ifdef RUN_SIMPLE
-void core(DataType A[SIZE], DataType B[SIZE], DataType C[SIZE], DataType alpha, DataType beta) {
-  for (int i = 0; i < sizeI; i++) {
-    for (int j = 0; j < sizeJ; j++) {
+void core(DataType A[SIZE][SIZE], DataType B[SIZE][SIZE], DataType C[SIZE][SIZE], DataType alpha, DataType beta) {
+  for (int i = 0; i < SIZE; i++) {
+    for (int j = 0; j < SIZE; j++) {
       C[i][j] *= beta;
     }
-    for (int k = 0; k < sizeK; k++) {
-      for (int j = 0; j < sizeJ; j++) {
+    for (int k = 0; k < SIZE; k++) {
+      for (int j = 0; j < SIZE; j++) {
         C[i][j] += alpha * A[i][k] * B[k][j];
       }
     }
@@ -24,14 +24,14 @@ void core(DataType A[SIZE], DataType B[SIZE], DataType C[SIZE], DataType alpha, 
 
 
 #ifdef RUN_CLAVA
-void core(DataType A[SIZE], DataType B[SIZE], DataType C[SIZE], DataType alpha, DataType beta) {
+void core(DataType A[SIZE][SIZE], DataType B[SIZE][SIZE], DataType C[SIZE][SIZE], DataType alpha, DataType beta) {
   #pragma clava data uve : true
-  for (int i = 0; i < sizeI; i++) {
-    for (int j = 0; j < sizeJ; j++) {
+  for (int i = 0; i < SIZE; i++) {
+    for (int j = 0; j < SIZE; j++) {
       C[i][j] *= beta;
     }
-    for (int k = 0; k < sizeK; k++) {
-      for (int j = 0; j < sizeJ; j++) {
+    for (int k = 0; k < SIZE; k++) {
+      for (int j = 0; j < SIZE; j++) {
         C[i][j] += alpha * A[i][k] * B[k][j];
       }
     }
@@ -41,6 +41,6 @@ void core(DataType A[SIZE], DataType B[SIZE], DataType C[SIZE], DataType alpha, 
 
 
 #ifdef RUN_BLANK
-void core(DataType A[SIZE], DataType B[SIZE], DataType C[SIZE], DataType alpha, DataType beta) {
+void core(DataType A[SIZE][SIZE], DataType B[SIZE][SIZE], DataType C[SIZE][SIZE], DataType alpha, DataType beta) {
 }
 #endif // RUN_BLANK

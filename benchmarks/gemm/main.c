@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "Commun.h"
 
-extern void core(DataType A[SIZE], DataType B[SIZE], DataType C[SIZE], DataType alpha, DataType beta);
+extern void core(DataType A[SIZE][SIZE], DataType B[SIZE][SIZE], DataType C[SIZE][SIZE], DataType alpha, DataType beta);
 
 int main() {
   DataType A[SIZE][SIZE];
@@ -10,9 +10,9 @@ int main() {
   DataType alpha = 2;
   DataType beta = 3;
 
-  initArray(A);
-  initArray(B);
-  initArray(C);
+  initArray2D(A);
+  initArray2D(B);
+  initArray2D(C);
 
   core(A, B, C, alpha, beta);
 

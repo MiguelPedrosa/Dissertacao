@@ -8,10 +8,10 @@
 
 
 #ifdef RUN_SIMPLE
-void core_kernel(float path[SIZE][SIZE], int size) {
-  for (int k = 0; k < size; k++) {
-    for (int i = 0; i < size; i++) {
-      for (int j = 0; j < size; j++) {
+void core(DataType path[SIZE][SIZE]) {
+  for (int k = 0; k < SIZE; k++) {
+    for (int i = 0; i < SIZE; i++) {
+      for (int j = 0; j < SIZE; j++) {
         path[i][j] = path[i][j] < path[i][k] + path[k][j]
                          ? path[i][j]
                          : path[i][k] + path[k][j];
@@ -23,11 +23,11 @@ void core_kernel(float path[SIZE][SIZE], int size) {
 
 
 #ifdef RUN_CLAVA
-void core_kernel(float path[SIZE][SIZE], int size) {
+void core(DataType path[SIZE][SIZE]) {
   #pragma clava data uve : true
-  for (int k = 0; k < size; k++) {
-    for (int i = 0; i < size; i++) {
-      for (int j = 0; j < size; j++) {
+  for (int k = 0; k < SIZE; k++) {
+    for (int i = 0; i < SIZE; i++) {
+      for (int j = 0; j < SIZE; j++) {
         path[i][j] = path[i][j] < path[i][k] + path[k][j]
                          ? path[i][j]
                          : path[i][k] + path[k][j];
