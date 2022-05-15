@@ -1,6 +1,6 @@
 laraImport("weaver.Query");
-laraImport("lara.Transformations.ArrayAccess");
-laraImport("lara.Transformations.DesugarExpression");
+laraImport("lara.Simplification.ArrayAccess");
+laraImport("lara.Simplification.DesugarExpression");
 
 
 function getUVECandidates() {
