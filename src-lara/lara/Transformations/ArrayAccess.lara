@@ -1,4 +1,0 @@
-import lara.MathExtra;
-import clava.ClavaJoinPoints;
-
-var ArrayAccess = {};

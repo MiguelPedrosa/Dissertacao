@@ -1,4 +1,4 @@
-ArrayAccess.extractAccesses = function ($loop) {
+function extractAccesses($loop) {
   const $accesses = Query.searchFrom($loop, "arrayAccess").get();
 
   let count = 0;
@@ -8,12 +8,12 @@ ArrayAccess.extractAccesses = function ($loop) {
   }
 }
 
-ArrayAccess.replaceCommonAccesses = function ($context) {
+function replaceCommonAccesses($context) {
   findAndReplaceCommunAccesses($context);
 }
 
 
-ArrayAccess.removeUnusedVariables = function ($context) {
+function removeUnusedVariables($context) {
   removeUnusedDeclarations($context);
 }
 

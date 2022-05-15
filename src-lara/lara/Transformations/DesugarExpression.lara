@@ -1,3 +1,0 @@
-import clava.ClavaJoinPoints;
-
-var DesugarExpression = {};

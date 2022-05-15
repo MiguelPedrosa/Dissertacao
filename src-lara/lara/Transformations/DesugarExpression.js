@@ -1,4 +1,7 @@
-DesugarExpression.desugarLoop = function ($loop) {
+laraImport("clava.ClavaJoinPoints");
+
+
+function desugarLoop($loop) {
   try {
     desugarBinaryOPAssigns($loop);
     desugarTernaryOperator($loop);
