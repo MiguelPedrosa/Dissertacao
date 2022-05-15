@@ -1,12 +1,15 @@
-Inspector.printJoinPoints = function (jp) {
-  if (jp === undefined) {
-    jp = Query.root();
+
+laraImport("weaver.Query");
+
+function printJoinPoints($jp) {
+  if ($jp === undefined) {
+    $jp = Query.root();
   }
-  printChildren(jp, 0);
+  printChildren($jp, 0);
 }
 
-Inspector.printClavaPragma = function (jp) {
-  println(Object.keys(jp.data));
+function printClavaPragma($jp) {
+  println(Object.keys($jp.data));
 };
 
 
