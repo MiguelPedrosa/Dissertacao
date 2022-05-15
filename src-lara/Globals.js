@@ -1,6 +1,7 @@
 laraImport("weaver.Query");
 laraImport("lara.ArrayAccess");
 laraImport("lara.DesugarExpression");
+laraImport("lara.Decompose");
 
 
 function getUVECandidates() {
@@ -11,6 +12,7 @@ function getTransformations() {
   return [
     desugarLoop,
     extractAccesses,
+    decomposeExpressions,
     // replaceCommonAccesses,
     removeUnusedVariables,
   ];
