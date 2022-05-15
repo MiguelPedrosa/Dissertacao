@@ -81,7 +81,7 @@ for (let kernel of kernels) {
   }
 
   /* Delete executables for next kernel */
-  const del = spawnSync("rm", ["-f", bin_simple, bin_clava, 'woven_code', `main.o`, `kernel.o`, `Commun.o`]);
+  const del = spawnSync("rm", ["-rf", bin_simple, bin_clava, 'woven_code', `main.o`, `kernel.o`, `Commun.o`]);
   if (del.error) {
     console.error(`Kernel ${kernel}: An error occured while deleting files for next execution: ${del.error.message}`);
     break;
