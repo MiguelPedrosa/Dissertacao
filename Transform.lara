@@ -2,6 +2,7 @@ aspectdef Launcher
 	input kernelName = "memcpy", compFlags="" end
   laraImport("Globals");
   laraImport("LoadKernel");
+  laraImport("UVEContext");
 
   // Load all wanted transformations
   var transformations = getTransformations();
@@ -11,9 +12,10 @@ aspectdef Launcher
   // Find all loops candidates and 
   // apply each transformation to every candidates
   var $loops = getUVECandidates();
-  for (var func of transformations) {
-    for (var $loop of $loops) {
-      func($loop);
+  for (var i = 0; i < $loops.length; i++) {
+    var context = new UVEContext(i);
+    for (var func of transformations) {
+      func($loops[i], context);
     }
   }
 

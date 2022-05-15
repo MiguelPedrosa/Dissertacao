@@ -1,10 +1,10 @@
 laraImport("clava.ClavaJoinPoints");
 
 
-function desugarLoop($loop) {
+function desugarLoop($loop, UVEContext) {
   try {
     desugarBinaryOPAssigns($loop);
-    desugarTernaryOperator($loop);
+    desugarTernaryOperator($loop, UVEContext);
     desugarComparisons($loop);
   } catch (e) {
     println(e);
@@ -50,16 +50,15 @@ function desugarBinaryOPAssigns($loop) {
 }
 
 
-function desugarTernaryOperator($loop) {
+function desugarTernaryOperator($loop, UVEContext) {
   const $targetJPs = Query.searchFrom($loop, "ternaryOp").get();
-  let count = 0;
-  const prefix = '_tr';
+
   for (var $tern of $targetJPs) {
     const $cond = $tern.cond;
     const $trueExpr = $tern.trueExpr;
     const $falseExpr = $tern.falseExpr;
     // Declare new temporary variable
-    const tempName = `${prefix}${count++}`;
+    const tempName = UVEContext.getUnusedStreamRegister();
     const $varDecl = ClavaJoinPoints.varDeclNoInit(tempName, $trueExpr.type);
     $tern.insertBefore($varDecl);
 

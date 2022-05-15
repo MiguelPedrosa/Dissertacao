@@ -1,23 +1,18 @@
-function extractAccesses($loop) {
+function extractAccesses($loop, UVEContext) {
   const $accesses = Query.searchFrom($loop, "arrayAccess").get();
 
-  let count = 0;
   for (let $access of $accesses) {
-    extractSingleAccess($access, '_a' + count);
-    count++;
+    extractSingleAccess($access, UVEContext.getUnusedStreamRegister());
   }
 }
 
-function replaceCommonAccesses($context) {
-  findAndReplaceCommunAccesses($context);
+function replaceCommonAccesses($loop) {
+  findAndReplaceCommunAccesses($loop);
 }
 
-
-function removeUnusedVariables($context) {
-  removeUnusedDeclarations($context);
+function removeUnusedVariables($loop) {
+  removeUnusedDeclarations($loop);
 }
-
-
 
 
 function extractSingleAccess($arrayAccess, newName) {
