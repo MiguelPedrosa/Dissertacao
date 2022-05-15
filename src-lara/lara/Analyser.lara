@@ -1,4 +1,0 @@
-import weaver.Query;
-
-
-var Analyser = {};
