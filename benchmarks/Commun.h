@@ -28,6 +28,7 @@
 
 
 void initArray(DataType array[SIZE]);
+void initArray2D(DataType array[SIZE][SIZE]);
 
 void initZero(DataType array[SIZE]);
 
