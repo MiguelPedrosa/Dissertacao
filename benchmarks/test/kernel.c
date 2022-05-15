@@ -39,7 +39,7 @@ void core(DataType dest[SIZE], DataType src[SIZE], DataType A) {
 #ifdef RUN_CLAVA
 void core(DataType dest[SIZE], DataType src[SIZE], DataType A) {
   #pragma clava data uve : true
-  for (int i = 0; i < SIZE; i++) {
+  for (int i = 0; SIZE > i; i++) {
     dest[i] += src[i] * A;
   }
 }
