@@ -5,6 +5,7 @@ function desugarLoop($loop) {
   try {
     desugarBinaryOPAssigns($loop);
     desugarTernaryOperator($loop);
+    desugarComparisons($loop);
   } catch (e) {
     println(e);
   }
@@ -70,5 +71,29 @@ function desugarTernaryOperator($loop) {
     $tern.ancestor("statement").insertBefore($ifStmt);
     // Replace ternary operation with new variable reference
     $tern.replaceWith(ClavaJoinPoints.varRef(tempName, $varDecl.type));
+  }
+}
+
+function desugarComparisons($loop) {
+  /* Replace all '>' with '<' and reverse operands order */
+  const $greaterThanCollection = Query.searchFrom($loop, "binaryOp", {
+    operator: op => op === '>',
+  }).get();
+
+  for (let $greaterThan of $greaterThanCollection) {
+    let {left, right, type} = $greaterThan;
+    const $newComparison = ClavaJoinPoints.binaryOp("<", right, left, type);
+    $greaterThan.replaceWith($newComparison);
+  }
+  
+  /* Replace all '>=' with '<=' and reverse operands order */
+  const $greaterThanEqCollection = Query.searchFrom($loop, "binaryOp", {
+    operator: op => op === '>=',
+  }).get();
+
+  for (let $greaterThanEq of $greaterThanEqCollection) {
+    let {left, right, type} = $greaterThanEq;
+    const $newComparison = ClavaJoinPoints.binaryOp("<=", right, left, type);
+    $greaterThanEq.replaceWith($newComparison);
   }
 }
