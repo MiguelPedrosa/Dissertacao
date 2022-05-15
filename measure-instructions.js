@@ -2,7 +2,7 @@
 
 const { spawnSync }= require("child_process");
 
-const kernels = [ "memcpy", "saxpy" ];
+const kernels = [ "memcpy", "saxpy", "test" ];
 const compileFlags = [ "-Wall", "-pedantic", "-DTYPE=1", "-DSIZE=2048" ];
 const linkFlags = [ "-Wall", "-pedantic", "-static" ];
 const compilerPath = "/home/miguel/diss/sources/install/uve_tc/bin/riscv64-unknown-elf-gcc";
@@ -10,7 +10,7 @@ const pkPath = "/home/miguel/diss/tools/riscv64-unknown-elf/bin/pk";
 const spikePath = "/home/miguel/diss/tools/bin/spike";
 const bin_blank = "./run_blank";
 const bin_simple = "./run_simple";
-const bin_uve = "./run_uve";
+const bin_clava = "./run_clava";
 
 const instructions = {};
 
@@ -35,17 +35,17 @@ function compileKernel(command, args) {
   }
 }
 
-function processInstructions(insBlank, insSimple, insUVE) {
-  const strippedUVE = insUVE - insBlank;
+function processInstructions(insBlank, insSimple, insClava) {
+  const strippedClava = insClava - insBlank;
   const strippedSimple = insSimple - insBlank;
 
   return {
     "Blank": insBlank,
     "Simple": insSimple,
-    "UVE": insUVE,
+    "Clava": insClava,
     "Simple (stripped)": strippedSimple,
-    "UVE (stripped)": strippedUVE,
-    "Stripped Comparison (UVE/Simple)": strippedUVE / strippedSimple,
+    "Clava (stripped)": strippedClava,
+    "Stripped Comparison (Clava/Simple)": strippedClava / strippedSimple,
   };
 }
 
@@ -64,38 +64,39 @@ function processBinRun(string) {
 
 for (let kernel of kernels) {
   /* Compile commun source files */
-  compileKernel(compilerPath, [...compileFlags, "-O3", "src/Commun.c", "-c"]);
-  compileKernel(compilerPath, [...compileFlags, "-O3", `src/${kernel}_main.c`, "-c"]);
+  compileKernel(compilerPath, [...compileFlags, "-O3", "benchmarks/Commun.c", "-c"]);
+  compileKernel(compilerPath, [...compileFlags, "-O3", "-Ibenchmarks/", `benchmarks/${kernel}/main.c`, "-c"]);
   /* Compile and link each kernel file */
-  compileKernel(compilerPath, [...compileFlags, "-DRUN_BLANK", "-O0", `src/${kernel}_kernel.c`, "-c" ]);
-  compileKernel(compilerPath, [...linkFlags, "-O0", "Commun.o", `${kernel}_main.o`, `${kernel}_kernel.o`, "-o", bin_blank]);
+  compileKernel(compilerPath, [...compileFlags, "-DRUN_BLANK", "-Ibenchmarks/", "-O0", `benchmarks/${kernel}/kernel.c`, "-c" ]);
+  compileKernel(compilerPath, [...linkFlags, "-O0", "Commun.o", `kernel.o`, `main.o`, "-o", bin_blank]);
 
-  compileKernel(compilerPath, [...compileFlags, "-DRUN_SIMPLE", "-O0", `src/${kernel}_kernel.c`, "-c" ]);
-  compileKernel(compilerPath, [...linkFlags, "-O0", "Commun.o", `${kernel}_main.o`, `${kernel}_kernel.o`, "-o", bin_simple]);
-
-  compileKernel(compilerPath, [...compileFlags, "-DRUN_UVE", "-O0", `src/${kernel}_kernel.c`, "-c" ]);
-  compileKernel(compilerPath, [...linkFlags, "-O0", "Commun.o", `${kernel}_main.o`, `${kernel}_kernel.o`, "-o", bin_uve]);
+  compileKernel(compilerPath, [...compileFlags, "-DRUN_SIMPLE", "-Ibenchmarks/", "-O0", `benchmarks/${kernel}/kernel.c`, "-c" ]);
+  compileKernel(compilerPath, [...linkFlags, "-O0", "Commun.o", `kernel.o`, `main.o`, "-o", bin_simple]);
+  
+  executableRun("clava", ["Transform.lara", "-i", "src-lara", `--argv=kernelName:'${kernel}'`, bin_clava]);
+  compileKernel(compilerPath, [...compileFlags, "-DRUN_CLAVA", "-Ibenchmarks/", "-O0", `output/${kernel}/kernel.c`, "-c" ]);
+  compileKernel(compilerPath, [...linkFlags, "-O0", "Commun.o", `kernel.o`, `main.o`, "-o", bin_clava]);
 
   /* Run each kernel file */
   const execBlank = executableRun(spikePath, [pkPath, "-s", bin_blank]);
   const execSimple = executableRun(spikePath, [pkPath, "-s", bin_simple]);
-  const execUVE = executableRun(spikePath, [pkPath, "-s", bin_uve]);
+  const execClava = executableRun(spikePath, [pkPath, "-s", bin_clava]);
 
 
   /* Extract instructions used during execution of both binaries */
   const insBlank = processBinRun(execBlank.stdout.toString());
   const insSimple = processBinRun(execSimple.stdout.toString());
-  const insUVE = processBinRun(execUVE.stdout.toString());
+  const insClava = processBinRun(execClava.stdout.toString());
 
   /* Extract and store kernel information to output later if all kernels pass */
   const blank = parseInt(insBlank);
   const simple = parseInt(insSimple);
-  const uve = parseInt(insUVE);
+  const clava = parseInt(insClava);
   const key = kernel.toUpperCase();
-  instructions[key] = processInstructions(blank, simple, uve);
+  instructions[key] = processInstructions(blank, simple, clava);
 
   /* Delete executables for next kernel */
-  const del = spawnSync("rm", ["-f", bin_blank, bin_simple, bin_uve, `${kernel}_main.o`, `${kernel}_kernel.o`, `Commun.o`]);
+  const del = spawnSync("rm", ["-f", bin_blank, bin_simple, bin_clava, `main.o`, `kernel.o`, `Commun.o`]);
   if (del.error) {
     console.error(`Kernel ${kernel}: An error occured while deleting files for next execution: ${del.error.message}`);
     break;
