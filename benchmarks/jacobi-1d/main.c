@@ -15,7 +15,8 @@ int main()
 
   core(A, B, ct);
 
-  for (int i = 0; i < SIZE; i++)
+  for (int i = 0; i < SIZE; i++) {
     printf( DataFormat("", "\n"), A[i]);
     printf( DataFormat("", "\n"), B[i]);
+  }
 }

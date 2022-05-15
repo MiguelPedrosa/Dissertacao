@@ -2,18 +2,18 @@
 #include "Commun.h"
 
 
-extern void core(DataType L[SIZE], DataType b[SIZE], DataType x[SIZE]);
+extern void core(DataType L[SIZE][SIZE], DataType b[SIZE], DataType x[SIZE]);
 
 int main() {
-  float L[SIZE][SIZE];
-  float b[SIZE];
-  float x[SIZE];
+  double L[SIZE][SIZE];
+  double b[SIZE];
+  double x[SIZE];
 
-  initArray(L);
+  initArray2D(L);
   initArray(b);
   initArray(x);
 
-  core_kernel(L, b, x);
+  core(L, b, x);
 
   for (int i = 0; i < SIZE; i++) {
     printf( DataFormat("", "\n"), x[i]);

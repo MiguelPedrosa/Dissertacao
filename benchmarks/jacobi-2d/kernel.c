@@ -3,7 +3,7 @@
 
 
 #ifdef RUN_UVE
-void core(DataType A[SIZE], DataType B[SIZE], DataType ct) {
+void core(DataType A[SIZE][SIZE], DataType B[SIZE][SIZE], DataType ct) {
   asm volatile(
     // A1 stream load
     "ss.sta.ld.d           u1, %[src1a], %[sn], %[one] \t\n"
@@ -43,7 +43,7 @@ void core(DataType A[SIZE], DataType B[SIZE], DataType ct) {
 
 
 #ifdef RUN_SIMPLE
-void core(DataType A[SIZE], DataType B[SIZE], DataType ct) {
+void core(DataType A[SIZE][SIZE], DataType B[SIZE][SIZE], DataType ct) {
   for (int i = 1; i < SIZE - 1; i++) {
     for (int j = 1; j < SIZE - 1; j++) {
       B[i][j] = ct  * (A[i][j] + A[i][j-1] + A[i][j+1] + A[i+1][j] + A[i-1][j]);
@@ -59,7 +59,7 @@ void core(DataType A[SIZE], DataType B[SIZE], DataType ct) {
 
 
 #ifdef RUN_CLAVA
-void core(DataType A[SIZE], DataType B[SIZE], DataType ct) {
+void core(DataType A[SIZE][SIZE], DataType B[SIZE][SIZE], DataType ct) {
   #pragma clava data uve : true
   for (int i = 1; i < SIZE - 1; i++) {
     for (int j = 1; j < SIZE - 1; j++) {
@@ -78,6 +78,6 @@ void core(DataType A[SIZE], DataType B[SIZE], DataType ct) {
 
 
 #ifdef RUN_BLANK
-void core(DataType A[SIZE], DataType B[SIZE], DataType ct) {
+void core(DataType A[SIZE][SIZE], DataType B[SIZE][SIZE], DataType ct) {
 }
 #endif // RUN_BLANK
