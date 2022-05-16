@@ -1,4 +1,0 @@
-import lara.IntermediateRepresentation.Statment;
-import lara.IntermediateRepresentation.Register;
-
-var Decompose = {};

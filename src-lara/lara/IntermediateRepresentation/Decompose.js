@@ -1,6 +1,6 @@
-Decompose.decomposeStatment = function ($stmt) {
+function decomposeStatment($stmt) {
   return _decomposeStatment($stmt);
-};
+}
 
 let labelCount = 0;
 
