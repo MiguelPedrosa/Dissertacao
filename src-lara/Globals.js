@@ -1,18 +1,17 @@
-laraImport("weaver.Query");
-laraImport("lara.ArrayAccess");
 laraImport("lara.DesugarExpression");
+laraImport("lara.ArrayAccess");
 laraImport("lara.Decompose");
+laraImport("lara.Predicate");
+laraImport("lara.Generate");
 
-
-function getUVECandidates() {
-  return Query.search("loop", { data: data => data.uve }).get();
-}
 
 function getTransformations() {
   return [
     desugarLoop,
     extractAccesses,
-    decomposeExpressions,
+    decompose,
+    // decomposePredicates,
+    generate,
     // replaceCommonAccesses,
     removeUnusedVariables,
   ];

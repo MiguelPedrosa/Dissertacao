@@ -3,6 +3,7 @@ aspectdef Launcher
   laraImport("Globals");
   laraImport("LoadKernel");
   laraImport("UVEContext");
+  laraImport("LoopFinder");
 
   // Load all wanted transformations
   var transformations = getTransformations();
