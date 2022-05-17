@@ -17,7 +17,7 @@ function printChildren(node, currentLevel) {
   const tab = "\t";
   const indentation = tab.repeat(currentLevel);
   for (let $child of node.getChildren()) {
-    println(indentation + $child);
+    println(indentation + $child + ": " + $child.code);
     printChildren($child, currentLevel + 1);
   }
 }
