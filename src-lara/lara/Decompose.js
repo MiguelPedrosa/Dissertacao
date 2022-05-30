@@ -1,3 +1,9 @@
+laraImport("lara.Inspector");
+
+function decompose($context, UVEContext) {
+  decomposeExpressions($context, UVEContext);
+}
+
 function decomposeExpressions($context, UVEContext) {
   if ($context.instanceOf("loop")) {
     decomposeExpressions($context.body, UVEContext);
@@ -32,9 +38,11 @@ function decomposeExpressions($context, UVEContext) {
 }
 
 function decomposeSingleExpr($context, UVEContext) {
+  // printJoinPoints($context);
   const { left, right, operator, joinPointType, code } = $context;
   const logicalOperators = ['&&', '||', '!'];
   const arithmeticOperators = ['+', '-', '*', '/', '<', '<=', '>', '>='];
+  // println("Received section: " + $context.code); /* Helper debug print */
 
   if (operator === '=') {
     decomposeExpressions(right, UVEContext);
@@ -42,18 +50,42 @@ function decomposeSingleExpr($context, UVEContext) {
     if (left.instanceOf("binaryOp")) {
       decomposeSingleExpr(left, UVEContext);
       logicalReplaceExpr(left, UVEContext);
+
     } else if (right.instanceOf("binaryOp")) {
       decomposeSingleExpr(right, UVEContext);
       logicalReplaceExpr(right, UVEContext);
+      /* TODO: Find better way to detect parenthesis */
+    } else if(left.code[0] === '(') {
+      decomposeSingleExpr(left.children[0], UVEContext);
+      logicalReplaceExpr(left.children[0], UVEContext);
+      left.replaceWith(left.children[0]);
+      /* TODO: Find better way to detect parenthesis */
+    } else if(right.code[0] === '(') {
+      decomposeSingleExpr(right.children[0], UVEContext);
+      logicalReplaceExpr(right.children[0], UVEContext);
+      right.replaceWith(right.children[0]);
+
     }
 
   } else if (arithmeticOperators.includes(operator)) {
     if (left.instanceOf("binaryOp")) {
       decomposeSingleExpr(left, UVEContext);
       arithmeticReplaceExpr(left, UVEContext);
+
     } else if (right.instanceOf("binaryOp")) {
       decomposeSingleExpr(right, UVEContext);
       arithmeticReplaceExpr(right, UVEContext);
+      /* TODO: Find better way to detect parenthesis */
+    } else if(left.code[0] === '(') {
+      decomposeSingleExpr(left.children[0], UVEContext);
+      arithmeticReplaceExpr(left.children[0], UVEContext);
+      left.replaceWith(left.children[0]);
+      /* TODO: Find better way to detect parenthesis */
+    } else if(right.code[0] === '(') {
+      decomposeSingleExpr(right.children[0], UVEContext);
+      arithmeticReplaceExpr(right.children[0], UVEContext);
+      right.replaceWith(right.children[0]);
+
     }
 
   } else {
@@ -63,7 +95,6 @@ function decomposeSingleExpr($context, UVEContext) {
     println("Right: " + right);
     println();
   }
-
 }
 
 function arithmeticReplaceExpr($context, UVEContext) {
