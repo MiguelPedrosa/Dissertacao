@@ -30,7 +30,7 @@ function desugarBinaryOPAssigns($loop) {
 
   // Find all operations that include a use of the previous operators
   const opKeys = Object.keys(operators);
-  const $targetJPs = Query.searchFrom($loop, "binaryOp", {
+  const $targetJPs = Query.searchFrom($loop.body, "binaryOp", {
     operator: op => opKeys.includes(op),
   }).get();
 
