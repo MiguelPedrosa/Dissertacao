@@ -7,12 +7,14 @@ laraImport("lara.Generate");
 
 function getTransformations() {
   return [
-    desugarLoop,
+    desugarBinaryOPAssigns,
+    desugarComparisons,
     extractAccesses,
+    desugarTernaryOperator,
     decompose,
-    // decomposePredicates,
-    generate,
-    // replaceCommonAccesses,
+    //replaceCommonAccesses,
     removeUnusedVariables,
+    // decomposePredicates,
+    // generate,
   ];
 }
