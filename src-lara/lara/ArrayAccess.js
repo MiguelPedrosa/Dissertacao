@@ -1,5 +1,11 @@
 function extractAccesses($loop, UVEContext) {
-  const $accesses = Query.searchFrom($loop, "arrayAccess").get();
+  const $variableAccesses = Query.searchFrom($loop.body, "arrayAccess").get();
+  const $constAcceses =  Query.searchFrom($loop.body, 'varref', {
+    name: n => n !== undefined && n !== 'i',
+  })
+  .get()
+  .filter($ref => $ref.ancestor('arrayAccess') === undefined);
+  const $accesses = [...$variableAccesses, ...$constAcceses];
 
   for (let $access of $accesses) {
     extractSingleAccess($access, UVEContext.getUnusedStreamRegister());
