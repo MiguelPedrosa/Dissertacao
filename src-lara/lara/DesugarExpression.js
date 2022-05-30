@@ -1,16 +1,6 @@
 laraImport("clava.ClavaJoinPoints");
 
 
-function desugarLoop($loop, UVEContext) {
-  try {
-    desugarBinaryOPAssigns($loop);
-    desugarTernaryOperator($loop, UVEContext);
-    desugarComparisons($loop);
-  } catch (e) {
-    println(e);
-  }
-}
-
 
 function desugarBinaryOPAssigns($loop) {
   // Map the search operators to the one used to replace
@@ -72,6 +62,7 @@ function desugarTernaryOperator($loop, UVEContext) {
     $tern.replaceWith(ClavaJoinPoints.varRef(tempName, $varDecl.type));
   }
 }
+
 
 function desugarComparisons($loop) {
   /* Replace all '>' with '<' and reverse operands order */
