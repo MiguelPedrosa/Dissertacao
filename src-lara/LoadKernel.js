@@ -7,11 +7,11 @@ function loadBenchmark(benchmarkName, extraFlags = "") {
 
 	const config = Clava.getData();
 	const currentFolderFolder = config.getContextFolder();
-  config.setFlags("-Wall -pedantic -DRUN_CLAVA " + extraFlags);
+	config.setFlags("-Wall -pedantic -DRUN_CLAVA " + extraFlags);
 	const benchmarkFolder = Io.getPath(currentFolderFolder, "./benchmarks");
 	const kernelFile = Io.getPath(benchmarkFolder, benchmarkName + "/kernel.c");
 
-  /* Make Commun.h accessible to compile kernel.c */
+	/* Make Commun.h accessible to compile kernel.c */
 	config.setUserIncludes(benchmarkFolder.getAbsolutePath());
 
 	Query.root().addFileFromPath(kernelFile);
