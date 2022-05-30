@@ -31,6 +31,10 @@ function decomposeExpressions($context, UVEContext) {
   } else if ($context.instanceOf("binaryOp")) {
     decomposeSingleExpr($context, UVEContext);
 
+  } else if ($context.instanceOf("varref")) {
+    /* Do nothing. These are 'terminal' instances
+    that should remain as they are */
+
   } else {
     println("Unexpected jp of " + $context.joinPointType + " : " + $context.code);
 
@@ -98,25 +102,42 @@ function decomposeSingleExpr($context, UVEContext) {
 }
 
 function arithmeticReplaceExpr($context, UVEContext) {
+  /* We take a context in the form of (1) and transform it into (2). We could
+  abreviate the new declaration into (3), however in future analysis interpreting
+  if it is a declaration of a stream or a temporary becomes much harder.
+  (1) a = b + c * d;
+  (2) T t;
+      t = c * d;
+      a = b + t;
+  (3) T t = c * d; */
   const newVarName = UVEContext.getUnusedStreamRegister();
-  /* Move expression to a new variable statment before the current expression */
-  const $varDecl = ClavaJoinPoints.varDecl(newVarName, $context);
+  /* First, declare the new variable and place it before the replaced statment */
+  const $varDecl = ClavaJoinPoints.varDeclNoInit(newVarName, $context.type);
   $context.insertBefore($varDecl);
-  /* Replace expression with new variable reference */
+  /* Then, we assign the variable to the value of the replacing operation */
+  const $newOperation = ClavaJoinPoints.varRef(newVarName, $context.type);
+  const $newAssign = ClavaJoinPoints.assign($newOperation, $context);
+  $context.insertBefore($newAssign);
+  /* Finally, we replace expression with new variable reference */
   const $newRef = ClavaJoinPoints.varRef(newVarName, $context.type);
   $context.replaceWith($newRef);
 }
 
-function logicalReplaceExpr($context, UVEContext) {
+function logicalReplaceExpr($expression, UVEContext) {
+  /* The logic here is similar to function arithmeticReplaceExpr's. The difference
+  is that using $expression as the init opeartion forces the new variable type to
+  be a 'bool' of C++, which is not recognized in C. As such, we use a type 'int'
+  so that it becomes a type commun one to both languages */
   const newVarName = UVEContext.getUnusedPredRegister();
-  /* Move expression to a new variable statment before the current expression */
-  /* NOTE: Using $context as the init opeartion forces the new variable type to
-   be a 'bool' of C++, which is not recognized in C. As such, we cast to an 'int'
-   so that it becomes a type commun one to both languages */
-  const $newInit = ClavaJoinPoints.cStyleCast(ClavaJoinPoints.typeLiteral('int'), $context);
-  const $varDecl = ClavaJoinPoints.varDecl(newVarName, $newInit);
-  $context.insertBefore($varDecl);
-  /* Replace expression with new variable reference */
-  const $newRef = ClavaJoinPoints.varRef(newVarName, $context.type);
-  $context.replaceWith($newRef);
+  const boolType = ClavaJoinPoints.typeLiteral('int');
+  /* First, declare the new variable and place it before the replaced statment */
+  const $varDecl = ClavaJoinPoints.varDeclNoInit(newVarName, boolType);
+  $expression.insertBefore($varDecl);
+  /* Then, we assign the variable to the value of the replacing operation */
+  const $newVar = ClavaJoinPoints.varRef(newVarName, boolType);
+  const $newAssign = ClavaJoinPoints.assign($newVar, $expression);
+  $expression.insertBefore($newAssign);
+  /* Finally, we replace expression with new variable reference */
+  const $newRef = ClavaJoinPoints.varRef(newVarName, boolType);
+  $expression.replaceWith($newRef);
 }
