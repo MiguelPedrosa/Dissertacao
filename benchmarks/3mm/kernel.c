@@ -28,7 +28,7 @@ void core(DataType src1[SIZE][SIZE], DataType src2[SIZE][SIZE], DataType src3[SI
 #pragma clava data uve : true
   for (int i = 0; i < SIZE; i++) {
     for (int j = 0; j < SIZE; j++) {
-      src1[i][j] = 0;
+      src1[i][j] = 0.0;
     }
     for (int k = 0; k < SIZE; k++) {
       for (int j = 0; j < SIZE; j++) {
