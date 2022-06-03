@@ -3,7 +3,7 @@
 const { spawnSync }= require("child_process");
 
 // const kernels = [ "3mm", "floyd-marshall", "gemm", "jacobi-1d", "jacobi-2d", "memcpy", "saxpy", "trisolv" ];
-const kernels = [ "floyd-marshall" ];
+const kernels = [ "saxpy", "memcpy", "gemm", "3mm" ];
 const compileFlags = [ "-Wall", "-pedantic", "-DTYPE=1", "-DSIZE=64" ];
 const linkFlags = [ "-Wall", "-pedantic", "-static" ];
 const compilerPath = "/home/miguel/diss/sources/install/uve_tc/bin/riscv64-unknown-elf-gcc";
