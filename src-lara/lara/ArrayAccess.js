@@ -2,10 +2,10 @@ function extractAccesses($loop, UVEContext) {
   const $variableAccesses = Query.searchFrom($loop.body, "arrayAccess").get();
   const $constAcceses =  Query.searchFrom($loop.body, 'varref', {
     name: n => n !== undefined && n !== 'i',
-  })
-  .get()
-  .filter($ref => $ref.ancestor('arrayAccess') === undefined);
-  const $accesses = [...$variableAccesses, ...$constAcceses];
+  }).get().filter($ref => $ref.ancestor('arrayAccess') === undefined);
+  const $literals = Query.searchFrom($loop.body, "literal").get();
+
+  const $accesses = [...$variableAccesses, ...$constAcceses, ...$literals];
 
   for (let $access of $accesses) {
     extractSingleAccess($access, UVEContext.getUnusedStreamRegister());
