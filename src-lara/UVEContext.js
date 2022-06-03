@@ -9,8 +9,13 @@ class UVEContext {
     /* Make 32 registers, all marked as unused */
     this.streamRegs = [... Array(32).keys()].map(() => false);
     /* Make 15 registers. We don't build a p0, because this never be a used
-    temporary as it is a register thats always run an instruction */
+    temporary as it is a register thats always runs an instruction */
     this.predicateRegs = [... Array(15).keys()].map(() => false);
+    /* Store all statments used in assembly generation */
+    this.statments = [];
+    /* Store all operands used in assembly generation */
+    /* Uses the literal as key and maps to the variable name within the assembly */
+    this.operands = new Map();
   }
 
   buildLabel() {
@@ -35,6 +40,29 @@ class UVEContext {
     if (regIDX === -1) return false;
     this.predicateRegs[regIDX] = true;
     return `p${regIDX + 1}`;
+  }
+
+  generateUniqueOperandName(name) {
+    if (this.operands.has(name)) {
+      return this.operands.get(name);
+    }
+    const generateLetter = () =>
+      String.fromCharCode(Math.floor((Math.random() * 25) + 65));
+    const generator = () =>
+      [...Array(6).keys()].map(_=>generateLetter()).join('');
+
+    const alreadyPresentNames = [...this.operands.values()];
+    let operand = generator();
+    while (alreadyPresentNames.includes(op => op === operand)) {
+      operand = generator();
+    }
+
+    this.operands.set(name, operand);
+    return operand;
+  }
+
+  getOperands() {
+    return this.operands;
   }
 
 };
