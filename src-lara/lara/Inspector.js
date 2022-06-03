@@ -22,3 +22,9 @@ function printChildren(node, currentLevel) {
   }
 }
 
+function stringfyObject(obj) {
+  return Object
+    .keys(obj)
+    .map(k => `obj["${k}"]: ${obj[k]}`)
+    .join(", ");
+}
