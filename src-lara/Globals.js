@@ -12,9 +12,9 @@ function getTransformations() {
     extractAccesses,
     desugarTernaryOperator,
     decompose,
-    //replaceCommonAccesses,
+    // replaceCommonAccesses,
     removeUnusedVariables,
-    // decomposePredicates,
-    // generate,
+    decomposePredicates,
+    generate,
   ];
 }
