@@ -14,7 +14,7 @@
 #if TYPE == 1
 #define DataType double
 #define DataSet fDataset
-#define DataFormat(start, end) start "%lf" end
+#define DataFormat(start, end) start "%3.4lf" end
 
 // Using integers
 #elif TYPE == 2
