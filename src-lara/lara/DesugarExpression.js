@@ -78,12 +78,12 @@ function desugarComparisons($loop) {
   
   /* Replace all '>=' with '<=' and reverse operands order */
   const $greaterThanEqCollection = Query.searchFrom($loop, "binaryOp", {
-    operator: op => op === '>=',
+    operator: op => op === '<=',
   }).get();
 
   for (let $greaterThanEq of $greaterThanEqCollection) {
     let {left, right, type} = $greaterThanEq;
-    const $newComparison = ClavaJoinPoints.binaryOp("<=", right, left, type);
+    const $newComparison = ClavaJoinPoints.binaryOp(">=", right, left, type);
     $greaterThanEq.replaceWith($newComparison);
   }
 }
