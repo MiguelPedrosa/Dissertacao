@@ -31,7 +31,7 @@ function decomposeExpressions($context, UVEContext) {
   } else if ($context.instanceOf("binaryOp")) {
     decomposeSingleExpr($context, UVEContext);
 
-  } else if ($context.instanceOf("varref")) {
+  } else if ($context.instanceOf("varref") || $context.instanceOf("literal")) {
     /* Do nothing. These are 'terminal' instances
     that should remain as they are */
 
