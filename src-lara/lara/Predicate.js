@@ -11,47 +11,46 @@ function decomposePredicates($context, UVEContext) {
 
 function flattenIfs($context, UVEContext) {
   const $IFs = Query.searchFrom($context, "if").get();
-  println("Found " + $IFs.length + " IFs");
 
   for (let $if of $IFs) {
-    const { cond, then, else: _else } = $if;
+    const { cond: $cond, then: $then, else: $else } = $if;
+    const condNameFalse = UVEContext.getUnusedPredRegister();
+    const condNameTrue = $cond.name;
+    
+    /* Declare negative condition variable of if's test */
+    addNegationVariable($if, $cond, condNameFalse);
 
-    /* Create NOT of cond */
-    const newVarName = UVEContext.getUnusedPredRegister();
-    const $negcond = ClavaJoinPoints.unaryOp('!', cond);
-    /* NOTE: Using $context as the init opeartion forces the new variable type to
-    be a 'bool' of C++, which is not recognized in C. As such, we cast to an 'int'
-    so that it becomes a type commun one to both languages */
-    const $newInit = ClavaJoinPoints.cStyleCast(ClavaJoinPoints.typeLiteral('int'), $negcond);
-    const $varDecl = ClavaJoinPoints.varDecl(newVarName, $newInit);
-    $if.insertBefore($varDecl);
-
-    const $newThenStmts = prefixStatments(cond.name, then.stmts);
-    for (let $newStmt of $newThenStmts) {
-      $if.insertBefore($newStmt);
-    }
-    const $newElseStmts = prefixStatments(newVarName, _else.stmts);
-    for (let $newStmt of $newElseStmts) {
-      $if.insertBefore($newStmt);
-    }
+    /* Add all statments that are expected to run */
+    const $thenStmts = prefixStatments(condNameTrue, $then.stmts);
+    const $elseStmts = prefixStatments(condNameFalse, $else.stmts);
+    const $allStmts = [...$thenStmts, ...$elseStmts];
+    $allStmts.forEach($stmt => {
+      $if.insertBefore($stmt)
+    });
 
     $if.detach();
   }
 }
 
+function addNegationVariable($if, $cond, conditionFalseName) {
+  const $negcond = ClavaJoinPoints.unaryOp('!', $cond);
+  const $notPredDecl = ClavaJoinPoints.varDeclNoInit(conditionFalseName, $cond.type);
+  $if.insertBefore($notPredDecl);
+  const $negVarRef = ClavaJoinPoints.varRef(conditionFalseName, $negcond.type);
+  const $newAssign = ClavaJoinPoints.assign($negVarRef, $negcond);
+  $if.insertBefore($newAssign);
+}
+
+
 function prefixStatments(predicate, $stmts) {
-  const newStmts = [];
-
-  for (let $stmt of $stmts) {
+  const $newStmts = $stmts.map(($stmt) => {
     if ($stmt.instanceOf("declStmt")) {
-      continue;
+      return null;
     }
+    const intLiteral = ClavaJoinPoints.typeLiteral('int');
+    const $leftOperand = ClavaJoinPoints.varRef(predicate, intLiteral);
+    return ClavaJoinPoints.binaryOp('&&', $leftOperand, $stmt.expr, intLiteral);
+  });
 
-    println("Prefixing stmt (" + $stmt.code + ") with " + predicate);
-    const $leftOperand = ClavaJoinPoints.varRef(predicate, ClavaJoinPoints.typeLiteral('int'));
-    const $binaryOp = ClavaJoinPoints.binaryOp('&&', $leftOperand, $stmt.expr);
-    newStmts.push($binaryOp);
-  }
-
-  return newStmts;
+  return $newStmts.filter(s => s !== null);
 }
