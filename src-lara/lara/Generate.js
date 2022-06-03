@@ -80,7 +80,8 @@ function processPredOperation($expr, predicate) {
       return `so.p.not ${destName}, ${name}, ${predicate}`;
     }
 
-  } else if ($right.joinPointType === 'varref') { /* move operation */
+  } else if ($right.joinPointType === 'varref' || $right.instanceOf("literal")) {
+    /* move operation */
     return `so.v.mv ${destName}, ${$right.name}, ${predicate}`;
   }
 
@@ -159,10 +160,10 @@ function prepareStreamDescriptores($varDecl, loopHeaders) {
   
   const reg = $varDecl.name;
   const code = $varDecl.init.code;
-  const offset = code.slice(0, code.length - 3);
+  const isStore = $varDecl.init.joinPointType === 'unaryOp' && $varDecl.init.operator === '&';
+  const offset = code.slice(isStore ? 1 : 0, code.length - 3);
   const size = iterations;
   const stride = stepValue;
-  const isStore = $varDecl.init.joinPointType === 'unaryOp' && $varDecl.init.operator === '&';
   const { bitWidth } = isStore ? $varDecl.init.operand : $varDecl;
   const width = widthMapping[bitWidth / 8];
   const type = isStore ? 'st' : 'ld';
