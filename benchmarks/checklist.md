@@ -6,7 +6,7 @@
 
 ## BLAS Routines
  - [x] gemm
- - [ ] gemver
+ - [x] gemver
  - [ ] gesummv
  - [ ] symm
  - [ ] syrk
@@ -16,8 +16,8 @@
 ## Linear Algebra Kernels
  - [ ] 2mm
  - [x] 3mm
- - [ ] atax
- - [ ] bicg
+ - [x] atax
+ - [x] bicg
  - [ ] doitgen
  - [ ] mvt
 
