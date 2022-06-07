@@ -50,21 +50,24 @@ function decomposeSingleExpr($context, UVEContext) {
 
   if (operator === '=') {
     decomposeExpressions(right, UVEContext);
+
   } else if (logicalOperators.includes(operator)) {
     if (left.instanceOf("binaryOp")) {
       decomposeSingleExpr(left, UVEContext);
       logicalReplaceExpr(left, UVEContext);
-
-    } else if (right.instanceOf("binaryOp")) {
+    }
+    if (right.instanceOf("binaryOp")) {
       decomposeSingleExpr(right, UVEContext);
       logicalReplaceExpr(right, UVEContext);
-      /* TODO: Find better way to detect parenthesis */
-    } else if(left.code[0] === '(') {
+    }
+    /* TODO: Find better way to detect parenthesis */
+    if(left.code[0] === '(') {
       decomposeSingleExpr(left.children[0], UVEContext);
       logicalReplaceExpr(left.children[0], UVEContext);
       left.replaceWith(left.children[0]);
-      /* TODO: Find better way to detect parenthesis */
-    } else if(right.code[0] === '(') {
+    }
+    /* TODO: Find better way to detect parenthesis */
+    if(right.code[0] === '(') {
       decomposeSingleExpr(right.children[0], UVEContext);
       logicalReplaceExpr(right.children[0], UVEContext);
       right.replaceWith(right.children[0]);
@@ -75,21 +78,22 @@ function decomposeSingleExpr($context, UVEContext) {
     if (left.instanceOf("binaryOp")) {
       decomposeSingleExpr(left, UVEContext);
       arithmeticReplaceExpr(left, UVEContext);
-
-    } else if (right.instanceOf("binaryOp")) {
+    }
+    if (right.instanceOf("binaryOp")) {
       decomposeSingleExpr(right, UVEContext);
       arithmeticReplaceExpr(right, UVEContext);
-      /* TODO: Find better way to detect parenthesis */
-    } else if(left.code[0] === '(') {
+    }
+    /* TODO: Find better way to detect parenthesis */
+    if(left.code[0] === '(') {
       decomposeSingleExpr(left.children[0], UVEContext);
       arithmeticReplaceExpr(left.children[0], UVEContext);
       left.replaceWith(left.children[0]);
+    }
       /* TODO: Find better way to detect parenthesis */
-    } else if(right.code[0] === '(') {
+    if(right.code[0] === '(') {
       decomposeSingleExpr(right.children[0], UVEContext);
       arithmeticReplaceExpr(right.children[0], UVEContext);
       right.replaceWith(right.children[0]);
-
     }
 
   } else {
