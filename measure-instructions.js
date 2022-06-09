@@ -46,7 +46,7 @@ function processInstructions(insBlank, insSimple, insClava) {
     "Clava": insClava,
     "Simple (stripped)": strippedSimple,
     "Clava (stripped)": strippedClava,
-    "Stripped Comparison (Clava/Simple)": strippedClava / strippedSimple,
+    "Speedup (Simple/Clava)": strippedSimple / strippedClava,
   };
 }
 
@@ -62,6 +62,15 @@ function processBinRun(string) {
   return null;
 }
 
+function deleteArtifacts(kernel) {
+  const del = spawnSync("rm", ["-rf", bin_blank, bin_simple, bin_clava, bin_uve, 'woven_code', `main.o`, `kernel.o`, `Commun.o`]);
+  if (del.error) {
+    console.error(`Kernel ${kernel}: An error occured while deleting files for next execution: ${del.error.message}`);
+    return false;
+  }
+  return true;
+}
+
 
 for (let kernel of kernels) {
   /* Compile commun source files */
@@ -73,7 +82,7 @@ for (let kernel of kernels) {
   
   compileKernel(compilerPath, [...compileFlags, "-DRUN_SIMPLE", "-Ibenchmarks/", "-O0", `benchmarks/${kernel}/kernel.c`, "-c" ]);
   compileKernel(compilerPath, [...linkFlags, "-O0", "Commun.o", `kernel.o`, `main.o`, "-o", bin_simple]);
-
+  
   executableRun("clava", ["Transform.lara", "-i", "src-lara", `--argv=kernelName:'${kernel}', compFlags:'${compileFlags.join(' ')}'`]);
   compileKernel(compilerPath, [...compileFlags, "-Ibenchmarks/", "-O0", `output/${kernel}/kernel.c`, "-c" ]);
   compileKernel(compilerPath, [...linkFlags, "-O0", "Commun.o", `kernel.o`, `main.o`, "-o", bin_clava]);
@@ -89,6 +98,7 @@ for (let kernel of kernels) {
   const insSimple = processBinRun(execSimple.stdout.toString());
   const insClava = processBinRun(execClava.stdout.toString());
 
+
   /* Extract and store kernel information to output later if all kernels pass */
   const blank = parseInt(insBlank);
   const simple = parseInt(insSimple);
@@ -97,11 +107,10 @@ for (let kernel of kernels) {
   instructions[key] = processInstructions(blank, simple, clava);
 
   /* Delete executables for next kernel */
-  const del = spawnSync("rm", ["-rf", bin_blank, bin_simple, bin_clava, 'woven_code', `main.o`, `kernel.o`, `Commun.o`]);
-  if (del.error) {
-    console.error(`Kernel ${kernel}: An error occured while deleting files for next execution: ${del.error.message}`);
+  if(deleteArtifacts(kernel) === false) {
     break;
   }
+
   console.log(`Finished Running ${kernel}`);
 }
 
