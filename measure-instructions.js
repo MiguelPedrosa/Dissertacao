@@ -63,7 +63,7 @@ function processBinRun(string) {
 }
 
 function deleteArtifacts(kernel) {
-  const del = spawnSync("rm", ["-rf", bin_blank, bin_simple, bin_clava, bin_uve, 'woven_code', `main.o`, `kernel.o`, `Commun.o`]);
+  const del = spawnSync("rm", ["-rf", bin_blank, bin_simple, bin_clava, 'woven_code', `main.o`, `kernel.o`, `Commun.o`]);
   if (del.error) {
     console.error(`Kernel ${kernel}: An error occured while deleting files for next execution: ${del.error.message}`);
     return false;
